@@ -1,0 +1,220 @@
+<!-- 
+	
+	by su
+	
+
+ -->
+<%include component/head.ejs %>
+<style type="text/css">
+.su-main{
+	overflow: hidden;
+	padding: 20px 0 0 40px;
+	font-size: 16px;
+	margin-right: 20px;
+}
+.title{
+	padding-left: 5px;
+	border-left: 4px solid rgb(67, 142, 185);
+	float: left;
+}
+.add{
+	float: right;
+	margin-right: 20px;
+}
+</style>
+
+
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs" style="overflow: hidden;">
+        <ul class="breadcrumb">
+            <li> <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">卡卷管理</a>
+            </li>
+            <li class="active">微信卡卷</li>
+        </ul>
+    </div>
+
+
+	<div class="su-main">
+		
+		<div>
+			<h4 class="title">卡卷列表</h4>
+			<div class="add">
+				<button type="button" id="addButton" class="btn btn-purple btn-sm" data-toggle="modal" data-target="#myModal">添加
+					<i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+				</button>
+			</div>	
+		</div>
+		
+
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="center">
+						<input type="checkbox" value="" class="
+						 ace">
+						 <span class="lbl"></span>
+					</th>
+					<th>卡券来源</th>
+					<th>卡券类型</th>
+					<th>卡卷ID</th>
+					<th>卡券名</th>
+					<th>有效期</th>
+					<th>现有数量</th>
+					<th>全部数量</th>
+					<th>状态</th>
+				</tr>
+			</thead>
+			<tbody>
+				<%  
+					for(var i =0 ;i < list.length;i++){	 
+					var info =list[i];	
+					
+
+					// 卡卷状态
+					var status ;
+					switch(info.status){
+						case 'CARD_STATUS_NOT_VERIFY':
+							status = '待审核';
+							break;
+						case 'CARD_STATUS_VERIFY_FAIL':
+							status = '审核失败';
+							break;
+						case 'CARD_STATUS_VERIFY_OK':
+							status = '待审核';
+							break;
+						case 'CARD_STATUS_DELETE':
+							status = '卡券被商户删除';
+							break;
+						case 'CARD_STATUS_DISPATCH':
+							status = '在公众平台投放过的';
+							break;
+						default:
+							status = '状态异常';
+							break;
+					}
+
+					// 卡券类型
+					var cardType ;
+					switch(info.cardType){
+						case 'GROUPON':
+							cardType = '团购券';
+							break;
+						case 'DISCOUNT':
+							cardType = '折扣券';
+							break;
+						case 'GIFT':
+							cardType = '礼品券';
+							break;
+						case 'CASH':
+							cardType = '代金券';
+							break;
+						case 'GENERAL_COUPON':
+							cardType = '通用券';
+							break;
+						case 'MEMBER_CARD':
+							cardType = '会员卡';
+							break;
+						default:
+							cardType = '类型异常';
+							break;
+					}
+
+				%>
+				<tr>
+
+					<td class="center" style="vertical-align: middle;">
+				        <label class="position-relative">
+                            <input type="checkbox" class="ace" name="checkDeviceSn" value="<%= info.deviceSn%>
+                            " id="tb"/>
+                            <span class="lbl"></span>
+                        </label>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.source) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (cardType) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.cardId) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.title) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.dateInfo) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.quantity) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.totalQuantity) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (status) %>
+					</td>
+				</tr>
+				<%}%>
+			</tbody>
+		</table>	
+
+		<form action="/card/page" method="get" id="searchForm">
+			<input type="hidden" name="currentPage" value="<%=currentPage%>" id="currentPage">
+			<input type="hidden" name="pageSize" value="<%=pageSize%>">
+		</form>
+
+
+		<div id="demo1" style="text-align: center;"></div>
+	</div>
+	
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	    <form action="/card/add" method="post">
+	      <div class="modal-header">
+
+	        <h4 class="modal-title" id="myModalLabel">设置卡卷ID</h4>
+	      </div>
+	      <div class="modal-body">
+			<input name="cardId" >
+	      </div>
+	      <div class="modal-footer">
+			<button type="submit" class="btn btn-primary">提交</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		</form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+</div><!-- /.main-content -->
+
+
+<%include component/footer.ejs %>
+<script src="/layui/layui.js"></script>
+<script>
+layui.use(['layer','laypage'], function(){
+ 
+	var currentPage = <%= currentPage%> ;
+	
+	laypage({
+    	cont: 'demo1'
+    	,pages: <%=totalPages%> 
+    	,groups: 5
+    	,curr: currentPage
+    	,skin: '#428bca'
+    	,jump: function(obj, first){
+      		if(!first){
+        		$("#currentPage").val(obj.curr);
+        		$('#searchForm').submit();                
+                layer.msg('第'+ obj.curr +'页');
+      		}
+    	}	
+  	});
+});  
+
+
+</script>

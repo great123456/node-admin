@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+!function(a,b){a.fn.ace_wizard=function(b){return this.each(function(){var c=a(this);c.wizard();var d=c.siblings(".wizard-actions").eq(0),e=c.data("wizard");e.$prevBtn.remove(),e.$nextBtn.remove(),e.$prevBtn=d.find(".btn-prev").eq(0).on(ace.click_event,function(){e.previous()}).attr("disabled","disabled"),e.$nextBtn=d.find(".btn-next").eq(0).on(ace.click_event,function(){e.next()}).removeAttr("disabled"),e.nextText=e.$nextBtn.text();var f=b&&(b.selectedItem&&b.selectedItem.step||b.step);f&&(e.currentStep=f,e.setState())}),this}}(window.jQuery);

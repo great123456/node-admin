@@ -1,0 +1,21 @@
+
+var express = require('express');
+var router  = express.Router();
+
+var fs      = require("fs");
+var func    = require('../core/func');
+var logger  = require('../core/util/logger');
+var rest    = require('../core/restUrl');
+var utils   = require('../core/util/utils');
+var http   = require('../core/util/http');
+var httpClient   = require('../core/util/httpClient').DHttpUtil;
+
+var PAGE_SIZE = 10 ;
+
+router.get('/water', function(req, res, next) {
+	var data ={}
+
+	data.PRO_MENU = {"menu":"funds","subMenu":"water"};
+	res.render("fundsWater",data);
+});
+module.exports = router;

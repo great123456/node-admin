@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+ace.auto_hide_sidebar=function(a){a(document).on(ace.click_event+".ace.hide",function(b){var c=a("#menu-toggler");if(0!=c.length&&0!=c[0].scrollHeight&&c.hasClass("display")){var d=a("#sidebar");if(a.contains(d[0],b.target))return void b.stopPropagation();d.removeClass("display"),c.removeClass("display")}})};

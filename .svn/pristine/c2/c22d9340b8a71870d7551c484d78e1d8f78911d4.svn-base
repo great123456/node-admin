@@ -1,0 +1,148 @@
+
+var express = require('express');
+var router  = express.Router();
+
+var fs      = require("fs");
+var func    = require('../core/func');
+var logger  = require('../core/util/logger');
+var rest    = require('../core/restUrl').urls;
+var utils   = require('../core/util/utils');
+var http   = require('../core/util/http');
+var httpClient   = require('../core/util/httpClient').DHttpUtil;
+
+var queuefun = require('queue-fun');
+
+var PAGE_SIZE = 10 ;
+
+router.get('/water', function(req, res, next) {
+	console.log('-----mouth.get---------');
+	var currentPage = req.params.currentPage;
+
+	if (currentPage == undefined) {
+		currentPage = 1;
+	}
+
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var date = utils.get30day();
+	var startDate =date.startDate;
+	var endDate =date.endDate;
+
+	var body = {
+		userPhone: userPhone,
+		startDate: startDate,
+		endDate: endDate,
+		currentPage: currentPage, 
+	};
+
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.fundsWater,
+		body: JSON.stringify(body)
+	};
+
+	var data ={};
+	data.PRO_MENU = {"menu":"funds","subMenu":"water"};
+	data.currentPage = currentPage;
+	data.startDate = startDate ;
+	data.endDate = endDate ;
+	data.data =[];
+	data.sum ={};
+	var code = 0;
+	http.doPost(restFulPotion,function(status,d){
+		if (status == 200 && d.data != undefined) {
+			data.data = d.data.datas;
+			code =code + 1;
+			if (code ==2) {
+				res.render("fundsWater",data);
+			}
+		}else {
+			res.render("fundsWater",data);
+		}
+		
+	});
+
+	var restFulPotion1 = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.fundsWaterSum,
+	};
+
+	http.doGet(restFulPotion1,function(status,d){
+		if (status == 200 && d.data != undefined) {
+			data.sum = d.data;
+			code =code + 1;
+			if (code ==2) {
+				res.render("fundsWater",data);
+			}
+		}else {
+			res.render("fundsWater",data);
+		}
+			
+	});
+
+});
+
+
+router.post('/water', function(req, res, next) {
+	console.log('-----water.post---------');
+	console.log(req.body);
+
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var startDate = req.body.startDate;
+	var endDate = req.body.endDate;
+	var currentPage = req.body.currentPage;
+
+	if (startDate ==undefined || startDate ==''
+		||endDate ==undefined || endDate ==''
+		||currentPage==undefined||currentPage=='') {
+		return res.send('参数错误');
+	}
+	var body = {
+		userPhone: userPhone,
+		startDate: startDate,
+		endDate: endDate,
+		currentPage: currentPage, 
+	};
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.fundsWater,
+		body: JSON.stringify(body)
+	}
+
+	var data ={}
+	data.PRO_MENU = {"menu":"funds","subMenu":"water"};
+	data.currentPage = currentPage;
+	data.startDate = startDate ;
+	data.endDate = endDate ;
+	data.sum = {
+		sum_Purchase:req.body.sum_Purchase,
+		sum_left: req.body.sum_left,
+		sum_widthraw: req.body.sum_widthraw,
+		sum_freeze: req.body.sum_freeze,
+	};
+
+
+	http.doPost(restFulPotion,function(status,d){
+		if(d!= undefined && status == 200 && d.code == 'SUCCESS'){
+			console.log(d.message);
+			if (d.message == 'RECORD_EMPTY' ) {
+				return res.send('指定时间内的记录数为空');
+			}else{
+				data.data = d.data.datas;
+				data.currentPage = currentPage;
+				console.log('-------post---water-----------');
+				res.render("fundsWater",data);
+			}
+		}else{
+			return res.send('参数错误');
+		}
+	});
+});
+
+
+
+module.exports = router;

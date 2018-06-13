@@ -1,0 +1,297 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">设备管理</a>
+                </li>
+                <li class="active">编辑信息</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="space-6"></div>
+
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <!-- #section:pages/invoice -->
+                                <div class="widget-box transparent">
+                                    <div class="widget-header widget-header-large">
+                                        <h3 class="widget-title grey lighter">
+                                            设备信息
+                                        </h3>
+
+<!--
+                                        &lt;!&ndash; #section:pages/invoice.info &ndash;&gt;
+                                        <div class="widget-toolbar no-border invoice-info">
+                                            <span class="invoice-info-label">Invoice:</span>
+                                            <span class="red">#121212</span>
+
+                                            <br />
+                                            <span class="invoice-info-label">Date:</span>
+                                            <span class="blue">04/04/2014</span>
+                                        </div>
+
+                                        <div class="widget-toolbar hidden-480">
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-print"></i>
+                                            </a>
+                                        </div>
+-->
+
+                                        <!-- /section:pages/invoice.info -->
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main padding-24">
+                                            <form class="form-horizontal" role="form" action="" method="POST">
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="row">
+                                                        <div class="col-xs-11 label label-lg label-info arrowed-in arrowed-right">
+                                                            <b>设备信息</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="space"></div>
+                                                    <div class="row">
+
+                                                            <!-- #section:elements.form -->
+                                                            <input type="hidden" name="id" value="<%= device.id%>"/>
+                                                            <input type="hidden" name="deviceSn" value="<%= device.deviceSn%>" />
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1">设备编号</label>
+
+                                                                <div class="col-sm-10">
+
+                                                                    <input disabled type="text" id="form-field-1" placeholder="设备编号" class="col-xs-10 col-sm-9" name="" value="<%= device.deviceSn%>" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2">设备名称</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input disabled type="text" id="form-field-2" placeholder="设备名称" class="col-xs-10 col-sm-9" name="deviceName" value="<%= device.deviceName%>" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-3">设备类型</label>
+
+                                                                <div class="col-xs-5 col-sm-5">
+
+                                                                    <select disabled class="form-control" id="factorySelect" data-placeholder="设备类型" name="deviceTypeId">
+                                                                        <% deviceType.forEach(function(info){ %>
+                                                                        <option value="<%=(info.id) %>" selected="<%= info.id == device.deviceTypeId ? "selected" : ""%>" ><%= (info.typeName) %></option>
+                                                                        <% })%>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-3">批次</label>
+                                                                <div class="col-xs-5 col-sm-5">
+                                                                    <select disabled class="form-control" id="factorySelect" data-placeholder="批次" name="batchNum">
+                                                                        <option value="" selected> </option>
+                                                                        <% batch.forEach(function(info){ %>
+                                                                        <option value="<%= (info.batchNum) %>" selected="<%= info.batchNum == device.batchNum ? "selected" : ""%>"><%= (info.batchName) %></option>
+                                                                        <% })%>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-3">设备描述</label>
+                                                                <div class="col-sm-10">
+                                                                    <input disabled type="text" id="form-field-3" placeholder="设备描述" class="col-xs-10 col-sm-9" name="description" value="<%= device.description%>"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-4">备注</label>
+                                                                <div class="col-sm-10">
+                                                                    <input disabled type="text" id="form-field-4" placeholder="备注" class="col-xs-10 col-sm-9" name="remark" value="<%= device.remark%>"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-4">创建时间</label>
+                                                                <div class="col-sm-10">
+                                                                    <input disabled type="text" id="form-field-4" placeholder="备注" class="col-xs-10 col-sm-9" value="<%= BUtile.getDateFormat(device.createTime)%>"/>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /section:elements.form -->
+                                                            <div class="space-4"></div>
+
+
+                                                    </div>
+                                                </div><!-- /.col -->
+
+                                                <div class="col-sm-6">
+                                                    <div class="row">
+                                                        <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                            <b>设备功能信息</b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="space"></div>
+                                                    <div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for="form-field-1">靠背移动角度</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input disabled type="text" id="form-field-1" placeholder="靠背移动角度0x00~0x05" class="col-xs-10 col-sm-9" name="backAngle" value="<%= device.backAngle%>" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for="form-field-2">小腿移动角度</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input disabled type="text" id="form-field-2" placeholder="小腿移动角度0x00~0x05" class="col-xs-10 col-sm-9" name="legAngle" value="<%= device.legAngle%>" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for="form-field-2">按摩椅模式</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input disabled type="text" id="form-field-2" placeholder="按摩椅模式，0x01-0x06" class="col-xs-10 col-sm-9" name="modeParm" value="<%= device.modeParm%>" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for="form-field-2">语音开关状态</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input disabled type="text" id="form-field-2" placeholder="语音开关状态，0x00关，0x01开" class="col-xs-10 col-sm-9" name="voiceOnoff" value="<%= device.voiceOnoff%>" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for="form-field-2">按摩椅状态</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input disabled type="text" id="form-field-2" placeholder="按摩椅状态" class="col-xs-10 col-sm-9" name="statusDesc" value="<%= device.statusDesc%>" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-2 control-label no-padding-right" for="form-field-2">连接状态</label>
+
+                                                            <div class="col-sm-10">
+                                                                <input disabled type="text" id="form-field-2" placeholder="连接状态" class="col-xs-10 col-sm-9" name="connectStatus" value="<%= device.connectStatus%>" />
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div><!-- /.col -->
+                                            </div><!-- /.row -->
+                                            </div>
+
+                                            </form>
+                                            <div class="hr hr8 hr-double hr-dotted"></div>
+                                            <div class="space"></div>
+
+                                            <div>
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="center">价格</th>
+                                                        <th class="center">按摩模式</th>
+                                                        <th class="center">功能命令</th>
+                                                        <th class="center">按摩时间</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <% devicePrice.forEach(function(info){ %>
+                                                        <tr>
+
+                                                            <td  class="center">
+                                                                <%= info.price%>
+                                                            </td>
+                                                            <td class="center">
+                                                               <%= info.func%>
+                                                           </td>
+                                                            <td class="center">
+                                                                <%= info.functionCmd%>
+                                                            </td>
+                                                            <td class="center">
+                                                                <%= info.workTime%>
+                                                            </td>
+                                                            <td class="center">
+                                                                <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openDelWin(<%= info.id%>)">删除</button>
+                                                            </td>
+                                                        </tr>
+                                                    <% })%>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="hr hr8 hr-double hr-dotted"></div>
+                                        <div class="row">
+                                            <div class="clearfix form-actions">
+                                                <div class="col-md-offset-10 col-md-9">
+                                                    <button class="btn btn-info" onclick="window.location.href = '/roleDevice/page'">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        返回
+                                                    </button>
+
+                                                    &nbsp; &nbsp; &nbsp;
+                                                    <!--<button class="btn" type="reset">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        重置
+                                                    </button>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- /section:pages/invoice -->
+                            </div>
+                        </div>
+
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row --><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+
+    <%include component/footer.ejs %>
+
+    <script>
+        var openDelWin = function(id)
+        {
+            var msg = "您真的确定要删除吗？\n\n请确认！";
+            if (confirm(msg)==true){
+
+                $("#priceId").val(id);
+                $("#devicePriceForm").submit();
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+    </script>

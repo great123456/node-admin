@@ -1,0 +1,261 @@
+<!-- 
+	
+	by su
+	
+
+ -->
+<%include component/head.ejs %>
+<style type="text/css">
+.su-main{
+	overflow: hidden;
+	padding: 20px 0 0 40px;
+	font-size: 16px;
+	margin-right: 20px;
+}
+.title{
+	float: left;
+	font-size: 20px;
+}
+.title > span:nth-child(1){
+	font-weight: bolder;
+	padding: 0 10px;
+}
+.title > span:nth-child(2){
+	color: red;
+	padding: 0 10px;
+}
+.centerA{
+	vertical-align: middle;
+}
+</style>
+
+
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs" style="overflow: hidden;">
+        <ul class="breadcrumb">
+            <li> <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">场所管理</a>
+            </li>
+            <li class="active">我的场所</li>
+        </ul>
+    </div>
+
+
+	<div class="su-main">
+
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-xs-9">
+				<div class="title">
+					<span>场所编号：</span><span> <%= data.regionNum%></span>
+				</div>
+				<div class="title">
+					<span>场所名称：</span><span><%= data.regionName%></span>
+				</div>
+				<div class="title">
+					<span>拥有设备数(台)：</span><span><%= data.regionDevCount%></span>
+				</div>
+			</div>
+			<div class="col-xs-3" style="text-align: right;">
+				<a href="/proxyDevice/page">
+					<button type="button" class="btn btn-primary" style="margin-right: 10px;">添加设备
+					</button>
+				</a>
+			</div>
+		</div>	
+	
+		<h4>拥有设备列表</h4>
+
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="center">
+						<input type="checkbox" value="" class="
+						 ace">
+						 <span class="lbl"></span>
+					</th>
+					<th>编号</th>
+					<th>设备ID</th>
+					<th>设备名称</th>
+					<th>批次</th>
+					<th>子代理商及比例</th>
+					<th>操作</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<%  
+					for(var i =0 ;i < data.regionDeviceDetail.length;i++){
+					 
+					var info = data.regionDeviceDetail[i];
+					
+					var arr =[];
+				%>
+				<tr>
+					<td class="center" style="vertical-align: middle;">
+				        <label class="position-relative">
+                            <input type="checkbox" class="ace" name="checkDeviceSn" value="<%= info.deviceSn%>
+                            " id="tb"/>
+                            <span class="lbl"></span>
+                        </label>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.devNumber) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.deviceSn) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.deviceName) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%= (info.batchNum) %>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+						<%
+						if(info.subProxyAndRateList != undefined){
+						info.subProxyAndRateList.forEach(function (lists) {
+						%>
+						     <span>子代理:<%= lists.loginName%></span><span> 手机号:<%= lists.mobile%></span><span> 比例:<%= lists.subProxyRate%></span><br>
+		
+						<%})}%>
+					</td>
+					<td class="center" style="vertical-align: middle;">
+
+
+					 	<form action="/site/childOne" method="post" style="margin: 10px 0;">
+							<button type="submit" class="btn btn-white btn-sm btn-primary" name="deviceSn" value="<%=info.deviceSn%>">分配子代理商</button>
+						</form>
+						<%
+							var c = JSON.stringify(info.subProxyAndRateList);	
+						%>
+					
+						<button type="button" class="btn btn-white btn-sm btn-primary" data-toggle="modal" data-target="#myModal" 
+						onclick="toDelete('<%=c%>','<%=info.deviceSn%>')">
+							删除子代理商
+						</button>
+					<!--  data-target="#myModal"  -->
+						
+					</td>
+				</tr>
+				<% }%>
+			</tbody>
+		</table>
+		
+
+		<div style="margin: 10px;">
+			<!-- <button type="button" class="btn btn-white btn-sm btn-primary" id="all">全选</button> -->
+			<button type="button" class="btn btn-white btn-sm btn-primary" onclick="return bingRegion()">批量分配子代理</button>
+		</div>
+
+		<form action="/site/page" method="get" id="searchForm">
+			<input type="hidden" name="currentPage" value="<%=currentPage%>" id="currentPage">
+			<input type="hidden" name="regionNum" value="<%=regionNum%>">
+		</form>
+
+	
+        <form id="bingRegionForm" action="/site/child" method="post">
+            <input type="hidden" name="deviceSns" id="deviceSns"/>
+
+        </form>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <form action="/site/delete" method="post">
+      <div class="modal-header">
+
+        <h4 class="modal-title" id="myModalLabel">子代理商选择</h4>
+      </div>
+      <div class="modal-body">
+   			<select class="form-control" id="dialog" name="subProxyUserId">
+
+            </select>
+      </div>
+      <div class="modal-footer">
+
+		<input type="hidden" name="deviceSn" id="dialogDeviceSn">
+
+		<button type="submit" class="btn btn-primary">提交</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+		<div id="demo1" style="text-align: center;"></div>
+	</div>
+
+</div><!-- /.main-content -->
+
+
+<%include component/footer.ejs %>
+<script src="/layui/layui.js"></script>
+<script>
+layui.use(['layer','laypage'], function(){
+ 
+	var currentPage = '<%= currentPage%>' ;
+	var regionNum = '<%= regionNum%>';
+	laypage({
+    	cont: 'demo1'
+    	,pages: '<%= totalPages %>'
+    	,groups: 5
+    	,curr: currentPage
+    	,skin: '#428bca'
+    	,jump: function(obj, first){
+      		if(!first){
+        		$("#currentPage").val(obj.curr);
+        		$('#searchForm').submit();                
+                layer.msg('第'+ obj.curr +'页');
+      		}
+    	}	
+  	});
+});  
+
+
+var bingRegion = function(){
+    var valArr = new Array;
+    $("input[name='checkDeviceSn']:checked").each(function(i){
+        valArr[i] = $(this).val();
+    });
+    var priv = valArr.join(',');
+
+    $("#deviceSns").val(priv);
+    $("#bingRegionForm").submit();
+    return true ;
+}	
+
+
+$('table th input:checkbox').on('click' , function(){
+	var that = this;
+	$(this).closest('table').find('tr > td:first-child input:checkbox').each(function(){
+		this.checked = that.checked;
+		$(this).closest('tr').toggleClass('selected');
+	});	
+});
+
+
+
+function toDelete(str,deviceSn) {
+	$('#dialog').children('option').remove()
+	var text ='';
+	$('#dialogDeviceSn').val(deviceSn);
+	var list = JSON.parse(str); 
+	for (var i = 0; i < list.length; i++) {
+		text =text + "<option value="+ list[i].subProxyUserId + "><span>子代理:"+ list[i].loginName+"</span><span> 手机号:"+ list[i].mobile+"</span><span> 比例: "+list[i].subProxyRate+"</span></option>"
+	}
+	
+	$('#dialog').append(text);
+}
+
+/*	alert($('#tb').is(':checked'));
+	if($('#tb').is(':checked')){   
+       $("input[style='checkbox']").attr("checked","true"); 
+    }else{    
+        $("tr > input :checkbox").attr("checked", false); 
+    }*/
+</script>

@@ -1,0 +1,422 @@
+<!-- 
+
+该为设备管理 我的设备 
+
+-->
+<%include component/head.ejs %>
+
+<!-- /section:basics/sidebar -->
+
+<%
+if('INDUSTRY_AGENT' == 'INDUSTRY_AGENT'){
+%>
+    <div class="main-content">
+    <!-- #section:basics/content.breadcrumbs -->
+    <div class="breadcrumbs" id="breadcrumbs">
+
+        <ul class="breadcrumb">
+            <li> <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">设备管理</a>
+            </li>
+            <li class="active">设备管理</li>
+        </ul>
+    </div>
+    
+    <style type="text/css">
+        .newpenel{
+
+            margin: 5px 0;
+          
+        }
+        .panel-h1{
+            font-size: 28px;
+        }
+       
+        .add > a{
+            border: 1px solid #cdcdcd;
+            border-radius: 2px;
+            padding: 2px 5px;
+            margin: 3px 3px;
+            float: left;
+            color: #000;
+        }
+        .add > a:focus{
+            color: #f00;
+            background: #f2f2f2;
+        }
+    </style>
+
+
+    <!-- /section:basics/content.breadcrumbs -->
+    <div class="page-content">
+
+        <!-- /section:settings.box -->
+        <div class="page-content-area">
+
+            <div class="row">
+            <div class="col-xs-12">
+                
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row newpenel">
+                            <div class="col-md-4 col-sm-12">
+                                <div class="panel-h1">
+                                    <span>所有设备管理</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="add">
+                                    <a href="/proxyDevice/page?currentPage=<%= data.currentPage %>">所有设备</a>
+                                    <a href="/proxyDevice/page?isAllocationed=false&currentPage=<%= data.currentPage %>">
+                                    未分配场所</a>
+                                    <a href="/proxyDevice/page?isAllocationed=true&currentPage=<%= data.currentPage %>">已分配场所</a>
+                                    <a href="/proxyDevice/page?connStatusCode=1&currentPage=<%= data.currentPage %>">在线</a>
+                                    <a href="/proxyDevice/page?connStatusCode=0&currentPage=<%= data.currentPage %>">离线</a>
+                                    <a href="/proxyDevice/page?statusCode=02&currentPage=<%= data.currentPage %>">停营中</a>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6">
+                                <form class="form-search" action="/proxyDevice/page" id="searchForm" id="searchForm">
+                                    <div class="input-group">
+                                        <select name="term" class="form-control" style="width: 40%;">
+                                            <option>按设备编号</option>
+                                            <option>按场所编号</option>
+                                            <option>按场所名称</option>
+                                            <option>按设备名称</option>
+                                        </select> 
+                                          
+                                        <input type="text" placeholder="名称" value="<%= data.keywords.name %>" name="name" style="width: 40%;margin-left: 10px;"/>
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-purple btn-sm">
+                                                查找 <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                       
+                    
+             
+            
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="position-relative">
+                                    <input type="checkbox" class="ace" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>
+                            <th>设备编号</th>
+                            <th>设备ID</th>
+                            <th>名称</th>
+                            <th>所属批次</th>
+                            <th>所在场所</th>
+                            <th>状态</th>
+                            <th>在线</th>
+                            <th>订单数(单)</th>
+                            <th>总收益(元)</th>
+                            <th>累计工作时间(分钟)</th>
+                            <th>操作</th>
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.list.forEach(function(info){ %>
+                        <tr>
+                            <td class="center">
+                                <label class="position-relative">
+                                    <input type="checkbox" class="ace" name="checkDeviceSn" value="<%= info.deviceSn%>
+                                    "/>
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+
+                            <td class="center">
+                                <%= info.devNumber%></td>
+                            <td class="center">
+                                <%= info.deviceSn%></td>
+                            <td class="center">
+                                <%= (info.deviceName) %></td>
+
+                            <td class="center">
+                                <%= info.batchNum %></td>
+
+                            <td class="center">
+                              <%= info.cityName %> - <%= info.regionName %></td>
+                            <td class="center">
+                                <%= info.statusDesc %></td>
+                            <!-- TODO 在线 订单数 总收益 修改参数-->
+                            <td class="center">
+                                <%= info.connectStatus %></td>
+                            <td class="center">
+                                <%= info.orderCount %></td>
+                            <td class="center">
+                                <%= info.allPay %></td>
+                            <td class="center">
+                                <%= info.allWorkTime %></td>
+                            <td class="center">
+                                <button type="button" class="btn btn-white btn-sm btn-primary" onclick="deviceCmd('<%= info.deviceSn%>','start')">启动</button>
+                                <button type="button" class="btn btn-white btn-sm btn-primary" onclick="deviceCmd('<%= info.deviceSn%>','stop')">停止</button>
+                                <!-- <button type="button" class="btn btn-white btn-sm btn-primary" onclick="deviceCmd('<%= info.deviceSn%>','failure')">故障</button> -->
+                                <button type="button" class="btn btn-white btn-sm btn-primary">修改参数</button>
+
+                                <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openUpdateWin(<%= info.id%>)">详情</button>
+                            </td>
+                            <% })%></tbody>
+                    </table>
+
+                    <div>
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="return bingRegion()">绑定场所</button>
+
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="return bingRegion()">停营选中</button>
+
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="return bingRegion()">分配场所</button>
+                    </div>
+                    <div align="center" id="tablePageButton"/>
+
+                </div>
+                <!-- /.span -->
+
+                <form id="deviceCmdForm" action="/proxyDevice/cmd" method="post" hidden>
+                    <input type="hidden" name="deviceSn" id="deviceSn"/>
+                    <input type="hidden" name="cmd" id="cmd"/>
+                    <input type="hidden" name="callback" id="callback"/>
+                </form>
+
+                <form id="bingRegionForm" action="/proxyDevice/bindRegionPage" method="post">
+                    <input type="hidden" name="deviceSns" id="deviceSns"/>
+                    <input type="hidden" name="callback" id="callback1"/>
+                </form>
+
+                <form id="bingSubProxyForm" action="/proxyDevice/bindSubProxyPage" method="get">
+                    <input type="hidden" name="deviceSns" id="subProxyDeviceSn"/>
+                    <input type="hidden" name="callback"/>
+                </form>
+            </div>
+        </div>
+     </div>
+</div>
+<%}
+else {%>
+<div class="main-content">
+    <!-- #section:basics/content.breadcrumbs -->
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+
+        <ul class="breadcrumb">
+            <li> <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">设备管理</a>
+            </li>
+            <li class="active">设备管理</li>
+        </ul>
+        <!-- /.breadcrumb --> </div>
+
+    <!-- /section:basics/content.breadcrumbs -->
+    <div class="page-content">
+
+        <!-- /section:settings.box -->
+        <div class="page-content-area">
+            <!--                <div class="page-header"></div>
+        &lt;!&ndash; /.page-header &ndash;&gt;-->
+        <div class="row">
+            <div class="col-xs-12">
+
+                <!--
+                    <div class="table-header col-xs-12">tablea-header</div>
+            -->
+            <div class="widget-box">
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <form class="form-search" action="/proxyDevice/page" id="searchForm">
+                            <div class="row">
+                                <div class="col-xs-3 col-sm-3">
+                                    <div class="input-group">
+                                        <!--"deviceSn","","deviceType","batchNum","location","regionNumber","regionName"-->
+                                        <input type="hidden" id="currentPage" name="currentPage" value="<%= data.currentPage %>
+                                        ">
+                                                状态
+                                        <select class="search-query" id="factorySelect" data-placeholder="是否已分配" name="isAllocationed">
+                                            <option value="true" <%= (data.keywords.isAllocationed ? "selected" : "") %>>已绑定</option>
+                                            <option value="false" <%= (!data.keywords.isAllocationed ? "selected" : "") %>>未绑定</option>
+                                        </select>
+                                        <!--                                                        <input type="text" class="search-query" placeholder="设备编号" value="<%= data.keywords.deviceName %>
+                                        " name="deviceSn"/>
+                                        <input type="text" class="search-query" placeholder="场所名称" value="<%= data.keywords.regionName %>
+                                        " name="regionName"/>-->
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-purple btn-sm">
+                                                查找 <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                                            </button>
+                                            <!--
+                                                    <button type="button" id="addButton" class="btn btn-purple btn-sm" style="margin-left: 5px;" onclick="window.location.href = '/device/add'">
+                                            添加
+                                            <i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+                                        </button>
+                                        -->
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="center">
+                        <label class="position-relative">
+                            <input type="checkbox" class="ace" />
+                            <span class="lbl"></span>
+                        </label>
+                    </th>
+                    <th>设备编号</th>
+                    <th>设备名称</th>
+                    <th>设备类型</th>
+                    <th>批次</th>
+                    <th>位置</th>
+                    <th>场所编号</th>
+                    <th>场所名称</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% data.list.forEach(function(info){ %>
+                <tr>
+                    <td class="center">
+                        <label class="position-relative">
+                            <input type="checkbox" class="ace" name="checkDeviceSn" value="<%= info.deviceSn%>
+                            "/>
+                            <span class="lbl"></span>
+                        </label>
+                    </td>
+
+                    <td class="center">
+                        <%= info.deviceSn%></td>
+                    <td class="center">
+                        <%= (info.deviceName) %></td>
+                    <td class="center">
+                        <%= info.deviceType %></td>
+                    <td class="center">
+                        <%= info.batchNum %></td>
+                    <td class="center">
+                        <%= info.location %></td>
+                    <td class="center">
+                        <%= info.regionNumber %></td>
+                    <td class="center">
+                        <%= info.regionName %></td>
+                    <td class="center">
+                        <%= info.statusDesc %></td>
+                    <td class="center">
+
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="deviceCmd('<%= info.deviceSn%>','start')">启动</button>
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="deviceCmd('<%= info.deviceSn%>','stop')">停止</button>
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="deviceCmd('<%= info.deviceSn%>','failure')">故障</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openUpdateWin(<%= info.id%>)">查看</button>
+                        <% if(data.keywords.isAllocationed == true){ %>
+                        <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openBindRroxyWin('<%= info.deviceSn%>')">分配子代理商</button>
+                        <% }%></td>
+                    <% })%></tbody>
+            </table>
+
+            <div>
+                <button type="button" class="btn btn-white btn-sm btn-primary" onclick="return bingRegion()">绑定场所</button>
+            </div>
+            <div align="center" id="tablePageButton"/>
+
+        </div>
+        <!-- /.span -->
+
+        <form id="deviceCmdForm" action="/proxyDevice/cmd" method="post" hidden>
+            <input type="hidden" name="deviceSn" id="deviceSn"/>
+            <input type="hidden" name="cmd" id="cmd"/>
+            <input type="hidden" name="callback" id="callback"/>
+        </form>
+
+        <form id="bingRegionForm" action="/proxyDevice/bindRegionPage" method="post">
+            <input type="hidden" name="deviceSns" id="deviceSns"/>
+            <input type="hidden" name="callback" id="callback1"/>
+        </form>
+
+        <form id="bingSubProxyForm" action="/proxyDevice/bindSubProxyPage" method="get">
+            <input type="hidden" name="deviceSns" id="subProxyDeviceSn"/>
+            <input type="hidden" name="callback"/>
+        </form>
+    </div>
+</div>
+<!-- /.main-content -->  
+<%}%>
+
+<!-- /.main-content -->
+<%include component/footer.ejs %>
+<script type="text/javascript">
+
+    var totalPage = <%= data.totalPages %>;
+    var currPage = <%= data.currentPage %> ;
+//调用分页
+laypage({
+    cont: 'tablePageButton',
+    pages: totalPage,
+    curr: currPage,
+    jump: function(obj, first){ //触发分页后的回调
+        if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+            $("#currentPage").val(obj.curr);
+            //$("#searchForm").submit();
+        }
+    }
+});
+    var openUpdateWin = function(id)
+    {
+        window.location.href = "/proxyDevice/update?id="+id;
+    }
+
+    var deviceCmd = function(deviceSn,cmd)
+    {
+        $("#deviceSn").val(deviceSn);
+        $("#cmd").val(cmd);
+        $("#callback").val(window.location.pathname + window.location.search) ;
+        $("#deviceCmdForm").submit();
+    }
+
+    var bingRegion = function()
+    {
+        var valArr = new Array;
+        $("input[name='checkDeviceSn']:checked").each(function(i){
+            valArr[i] = $(this).val();
+        });
+        var priv = valArr.join(',');
+
+        $("#deviceSns").val(priv);
+        $("#callback1").val(window.location.pathname + window.location.search) ;
+        $("#bingRegionForm").submit();
+        return true ;
+    }
+
+    var openBindRroxyWin = function(deviceSn)
+    {
+        $("#subProxyDeviceSn").val(deviceSn);
+        $("input[name='callback']").val(window.location.pathname + window.location.search) ;
+        $("#bingSubProxyForm").submit() ;
+    }
+
+
+</script>
+<script>
+    $(document).on('click', 'th input:checkbox' , function(){
+        var that = this;
+        $(this).closest('table').find('tr > td:first-child input:checkbox')
+                .each(function(){
+                    this.checked = that.checked;
+                    $(this).closest('tr').toggleClass('selected');
+                });
+    });
+</script>

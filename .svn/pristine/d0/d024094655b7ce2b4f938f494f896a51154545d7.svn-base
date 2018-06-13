@@ -1,0 +1,303 @@
+<%include component/head.ejs %>
+    <!-- /section:basics/sidebar -->
+
+
+<%if(role == 'INDUSTRY_AGENT'){%>
+
+<div class="main-content">
+    <!-- #section:basics/content.breadcrumbs -->
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li> <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">设备管理</a>
+            </li>
+            <li class="active">场所管理</li>
+        </ul>
+    </div>
+    <!-- /section:basics/content.breadcrumbs -->
+    
+    <style type="text/css">
+        .newpenel{
+
+            margin: 5px 0;
+          
+        }
+        .panel-h1{
+            font-size: 28px;
+        }
+       
+        .add > a{
+            border: 1px solid #cdcdcd;
+            border-radius: 2px;
+            padding: 2px 5px;
+            margin: 3px 3px;
+            float: left;
+            color: #000;
+        }
+        .add > a:focus{
+            color: #f00;
+            background: #f2f2f2;
+        }
+
+        .refurbish{
+            border: 1px solid #cdcdcd;
+            border-radius: 2px;
+            padding: 2px 5px;
+            margin: 3px 3px;
+        }
+    </style>
+
+    <div class="page-content">
+        <!-- /section:settings.box -->
+        <div class="page-content-area">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">      
+                            <div class="row newpenel">
+                                  <div class="col-md-4 col-sm-12">
+                                    <div class="panel-h1">
+                                       <span>所有场所管理</span>       
+                                    </div>
+                                 </div>
+                                  <div class="col-md-3 col-sm-6">
+                                    <div class="add">
+                                      <a href="/deviceRegion/page?currentPage=<%= data.currentPage%>">所有场所</a>
+                                      <a href="/deviceRegion/page?cityName=广州&currentPage=<%= data.currentPage%>">广州</a>
+                                      <a href="/deviceRegion/page?cityName=北京&currentPage=<%= data.currentPage%>">北京</a>
+                                      <a href="/deviceRegion/page?cityName=深圳&currentPage=<%= data.currentPage%>">深圳</a>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-5 col-sm-6">
+                                      <form class="form-search" action="/deviceRegion/page" id="searchForm">
+                                          <div class="input-group">
+                                                <select name="term" class="form-control" style="width: 40%;">
+                                                  <option>按场所编号</option>
+                                                  <option>按场所名称</option>
+                                                  <option>按城市名称</option>
+                                                </select> 
+                                              
+                                                <input type="text" placeholder="名称" value="<%= data.keywords.name %>" name="name" style="width: 40%;margin-left: 10px;"/>
+
+                                                <span class="input-group-btn" style="width: 20%";>
+                                                  <button type="submit" class="btn btn-purple btn-sm">
+                                                    <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>  查找
+                                                  </button>
+                                                </span>
+                                                           
+                                                <input type="hidden" id="currentPage" name="currentPage" value="<%= data.keywords.currentPage %>">
+                                          </div>
+                                      </form>
+                                  </div>
+                            </div>
+
+                            <div style="font-size: 16px;margin-top: 10px;">
+                                <div class="col-md-3 col-sm-6">我的场所
+                                    <!-- <span class="refurbish">刷新</span> -->
+                                    <a class="refurbish" href="javascript:location.reload();">刷新</a>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                            
+                     
+                    <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>场所编号</th>
+                                <th>场所名称</th>
+                                <th>所在城市</th>
+                             <!--    <th>场所详情地址</th>
+                             <th>场所用途</th>
+                             <th>场所归属者</th> -->
+                                <th>拥有设备(台)</th>
+                                <th>在线(台)</th>
+                                <th>离线(台)</th>
+                                <th>工作中(台)</th>
+                                <th>订单数(单)</th>
+                                <th>总收益(元)</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% data.list.forEach(function(info){ %>
+                            <tr>
+                                <td class="center">
+                                    <%= (info.number) %></td>
+                                <td class="center">
+                                    <%= info.name %></td>
+                                <td class="center">
+                                    <%= info.cityName %>-<%= info.districtName %></td>
+                                <!-- <td class="center">
+                                    <%= info.address %></td>
+                                <td class="center">
+                                    <%= info.description%></td>
+                                <td class="center">
+                                    <%= info.ownerName %></td> -->
+                                <td class="center">
+                                    <%= info.allDevices%></td>
+
+
+                                <td class="center">
+                                    <%= info.onLineDevices%>
+                                </td>
+                                <td class="center">
+                                    <%= info.offLineDevices%>
+                                </td>
+                                <td class="center">
+                                    <%= info.runningDevices%>
+                                </td>
+                                <td class="center">
+                                    <%= info.allOrders%>
+                                </td>
+
+                                <td class="center">
+                                    <%= info.allPay%></td>
+                                <td class="center">
+                                    <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openUpdateWin(<%= info.number%>)">设备管理</button>
+
+                                    <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openDetail('<%= info.number%>')">详情</button>
+                                </td>
+
+                                <% })%></tbody>
+                        </table>
+
+                        <div align="center" id="tablePageButton"/>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<%}else{%>
+<div class="main-content">
+    <!-- #section:basics/content.breadcrumbs -->
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li> <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">设备管理</a>
+            </li>
+            <li class="active">场所管理</li>
+        </ul>
+    </div>
+    <!-- /section:basics/content.breadcrumbs -->
+    <div class="page-content">
+        <!-- /section:settings.box -->
+        <div class="page-content-area">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="widget-box">
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <form class="form-search" action="/deviceRegion/page" id="searchForm">
+                                    <div class="row">
+                                        <div class="col-xs-5 col-sm-5">
+                                            <div class="input-group">
+                                                <input type="hidden" id="currentPage" name="currentPage" value="<%= data.keywords.currentPage %>
+                                                ">
+                                                <input type="text" class="search-query" placeholder="名称" value="<%= data.keywords.name %>" name="name"/>
+                                                <span class="input-group-btn">
+                                                    <button type="submit" class="btn btn-purple btn-sm">
+                                                        查找 <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                                                    </button>
+                                                    <button type="button" id="addButton" class="btn btn-purple btn-sm" style="margin-left: 5px;" onclick="window.location.href = '/deviceRegion/add'">
+                                                        添加
+                                                        <i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>场所编号</th>
+                                <th>场所名称</th>
+                                <th>场所详情地址</th>
+                                <th>场所用途</th>
+                                <th>场所归属者</th>
+                                <th>设备数量</th>
+                                <th>总收益(元)</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% data.list.forEach(function(info){ %>
+                            <tr>
+                                <td class="center">
+                                    <%= (info.number) %></td>
+                                <td class="center">
+                                    <%= info.name %></td>
+                                <td class="center">
+                                    <%= info.address %></td>
+                                <td class="center">
+                                    <%= info.description%></td>
+                                <td class="center">
+                                    <%= info.ownerName %></td>
+                                <td class="center">
+                                    <%= info.allDevices%></td>
+                                <td class="center">
+                                    <%= info.allPay%></td>
+                                <td class="center">
+                                    <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openUpdateWin(<%= info.id%>)">编辑</button>
+                                    <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openDeleteWin(<%= info.id%>)">删除</button>
+                                    <button type="button" class="btn btn-white btn-sm btn-primary" onclick="openDetail('<%= info.number%>')">详情</button>
+                                </td>
+
+                                <% })%></tbody>
+                        </table>
+
+                        <div align="center" id="tablePageButton"/>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%}%>
+
+
+
+
+<script>
+    var totalPage = '<%= data.totalPages %>';
+    var currPage  = '<%= data.currentPage%>';
+    //调用分页
+    laypage({
+        cont: 'tablePageButton',
+        pages: totalPage,
+        curr: currPage,
+        jump: function(obj, first){ //触发分页后的回调
+            if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+                $("#currentPage").val(obj.curr);
+                $("#searchForm").submit();
+            }
+        }
+    });
+
+    var openUpdateWin = function(id) {
+       /* window.location.href = "/deviceRegion/update?id="+id;*/
+       window.location.href = "/site/page?id="+id;
+    }
+
+    var deviceCmd = function(deviceSn,cmd) {
+        $("#deviceSn").val(deviceSn);
+        $("#cmd").val(cmd);
+        $("#callback").val(window.location.pathname + window.location.search) ;
+        $("#deviceCmdForm").submit();
+    }
+    var openDetail = function(number) {
+        window.location.href = "/deviceRegion/detail?number="+number;
+    }
+</script>
+
+<%include component/footer.ejs %>

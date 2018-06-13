@@ -1,0 +1,335 @@
+<div id="sidebar" class="sidebar                  responsive">
+    <script type="text/javascript">
+        try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+    </script>
+
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="ace-icon fa fa-signal"></i>
+            </button>
+
+            <button class="btn btn-info">
+                <i class="ace-icon fa fa-pencil"></i>
+            </button>
+
+            <!-- #section:basics/sidebar.layout.shortcuts -->
+            <button class="btn btn-warning">
+                <i class="ace-icon fa fa-users"></i>
+            </button>
+
+            <button class="btn btn-danger">
+                <i class="ace-icon fa fa-cogs"></i>
+            </button>
+
+            <!-- /section:basics/sidebar.layout.shortcuts -->
+        </div>
+
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+
+            <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span>
+
+            <span class="btn btn-danger"></span>
+        </div>
+    </div><!-- /.sidebar-shortcuts -->
+
+    <ul class="nav nav-list">
+
+        <li class="<%= PRO_MENU.menu == "index" ? "active" : ""%>">
+            <a href="#" class="">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text"> 主页 </span>
+
+                <b class="arrow"></b>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "superAdmin" ? "active hsub open" : ""%>">
+            <a href="/index" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">账户管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+                <!--<li class="<%= PRO_MENU.subMenu == "platformAdminPage" ? "active" : ""%>">-->
+                    <!--<a href="/super/platfrom">-->
+                        <!--<i class="menu-icon fa fa-caret-right"></i>-->
+                        <!--平台管理员管理-->
+                    <!--</a>-->
+
+                    <!--<b class="arrow"></b>-->
+                <!--</li>-->
+                <li class="<%= PRO_MENU.subMenu == "proxyAdminPage" ? "active" : ""%>">
+                    <a href="/super/proxyAdmin">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        代理商管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <!--<li class="<%= PRO_MENU.subMenu == "subProxyAdminPage" ? "active" : ""%>">-->
+                    <!--<a href="/super/subProxyAdmin">-->
+                        <!--<i class="menu-icon fa fa-caret-right"></i>-->
+                        <!--子代理商管理-->
+                    <!--</a>-->
+
+                    <!--<b class="arrow"></b>-->
+                <!--</li>-->
+                <li class="<%= PRO_MENU.subMenu == "factoryAdminPage" ? "active" : ""%>">
+                    <a href="/super/factoryAdmin">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        厂商管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<%= PRO_MENU.subMenu == "operatorPage" ? "active" : ""%>">
+                    <a href="/super/operatorAdmin">
+                        <i class="menu-icon fa fa-caret-right"></i>销售管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "order" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">订单管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "orderPage" ? "active" : ""%>">
+                    <a href="/order/page">
+                        <i class="menu-icon fa fa-caret-right"></i>订单查看
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "device" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">设备管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "batchPage" ? "active" : ""%>">
+                    <a href="/batch/page">
+                        <i class="menu-icon fa fa-caret-right"></i>设备批次
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="<%= PRO_MENU.subMenu == "deviceTypePage" ? "active" : ""%>">
+                    <a href="/deviceType/page">
+                        <i class="menu-icon fa fa-caret-right"></i>设备类型
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="<%= PRO_MENU.subMenu == "devicePage" ? "active" : ""%>">
+                    <a href="/device/page">
+                        <i class="menu-icon fa fa-caret-right"></i>我的设备
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+
+
+        <li class="<%= PRO_MENU.menu == "sharePage" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">分润管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "batchSharePage" ? "active" : ""%>">
+                    <a href="/device/share/page">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        分润设置
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+
+
+        <li class="<%= PRO_MENU.menu == "wxUser" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">会员中心</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "wxUserPage" ? "active" : ""%>">
+                    <a href="/wxUser/page">
+                        <i class="menu-icon fa fa-caret-right"></i>会员查看
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="<%= PRO_MENU.subMenu == "evaluatePage" ? "active" : ""%>">
+                    <a href="/wxUser/evaluatePage">
+                        <i class="menu-icon fa fa-caret-right"></i>会员反馈
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+    
+        <li class="<%= PRO_MENU.menu == "card" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">卡卷管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "wxcard" ? "active" : ""%>">
+                    <a href="/card/page">
+                        <i class="menu-icon fa fa-caret-right"></i>微信卡卷
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "refund" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">退款管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "page" ? "active" : ""%>">
+                    <a href="/refund/page">
+                        <i class="menu-icon fa fa-caret-right"></i>退款列表
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="<%= PRO_MENU.menu == "price" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">价格管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "combo" ? "active" : ""%>">
+                    <a href="/price/combo">
+                        <i class="menu-icon fa fa-caret-right"></i>套餐管理
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="<%= PRO_MENU.subMenu == "setprice" ? "active" : ""%>">
+                    <a href="/price/setprice">
+                        <i class="menu-icon fa fa-caret-right"></i>设备价格设置
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+
+
+        <li class="<%= PRO_MENU.menu == "member" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">个人中心</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "updatePassword" ? "active" : ""%>">
+                    <a href="/member/updatePassword">
+                        <i class="menu-icon fa fa-caret-right"></i>修改密码
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+    </ul><!-- /.nav-list -->
+
+    <!-- #section:basics/sidebar.layout.minimize -->
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+
+    <!-- /section:basics/sidebar.layout.minimize -->
+    <script type="text/javascript">
+        try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+    </script>
+</div>

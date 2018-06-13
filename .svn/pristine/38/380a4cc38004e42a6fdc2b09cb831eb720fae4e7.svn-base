@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+var RedisCluster=require("ioredis"),cluster;exports.redisClusterConnect=function(a){var b=a.redisClusterOption;return void 0==cluster&&(cluster=new RedisCluster.Cluster(b.address)),cluster},exports.setValue=function(a,b,c){void 0!=cluster&&(cluster.set(a,b),void 0!=c&&c>0&&cluster.expire(a,c))},exports.getValue=function(a,b){void 0!=cluster&&cluster.get(a,function(a,c){b(a,c)})};

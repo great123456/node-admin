@@ -1,0 +1,62 @@
+var express = require('express');
+
+var router = express.Router();
+var rest = require('../core/restUrl').urls;
+var utils = require('../core/util/utils');
+var http = require('../core/util/http');
+
+router.get('/query', function(req, res) {
+   console.log("---数据查询页面----");
+   var params=req.query;
+   if(params.beginTime){
+  	var time=params.beginTime;
+  	params.beginTime=time.substring(0,10);
+  	var startDate=params.beginTime;
+   }else{
+  	var startDate='';
+   };
+   if(params.finishTime){
+  	var time=params.finishTime;
+  	params.finishTime=time.substring(0,10);
+  	var endDate=params.finishTime;
+   }else{
+  	var endDate='';
+   };
+   var currentPage = params.currentPage||'';
+   var body={
+  	currentPage:currentPage,
+  	pageSize:'10',
+  	uid:req.session.user.uid,
+  	startDate:startDate,
+  	endDate:endDate
+   };
+   var restFulPotion = {
+	     host: rest.emomoYunkong.host,
+	     port: rest.emomoYunkong.port,
+	     path: rest.emomoYunkong.operatequery,
+	     body: JSON.stringify(body)
+   };
+
+   http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("数据查询页面请求成功");
+       	   console.log(d);
+       	   console.log(d.data.list[0]);
+       	   var data={
+       	     PRO_MENU: { menu: 'operate', subMenu: 'query' },
+       	     data:d.data,
+       	     params:params
+       	   };
+           res.render('operatepage',data);
+       }else {
+           console.log("数据查询页面请求错误");
+           utils.pageMessage(req, res, data.mes, "/index", "address", "addAddress");
+       }
+
+    });
+
+  
+});
+
+module.exports = router;

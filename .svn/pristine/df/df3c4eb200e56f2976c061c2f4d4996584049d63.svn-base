@@ -1,0 +1,321 @@
+<!-- 
+	
+	by su
+	资金流水
+
+ -->
+<%include component/head.ejs %>
+<link rel="stylesheet" href="/layui/css/layui.css">
+<style type="text/css">
+	.su-main{
+		overflow: hidden;
+		padding: 20px 0 0 40px;
+		font-size: 16px;
+	}
+	.su-a{
+		margin: 15px 20px 15px 0;
+		clear: both;
+		overflow-x: hidden;
+	}
+
+	.su-div1 > div{
+		float: left;
+	}
+	.su-div1 > div:nth-child(1){
+		width: 80px;
+	}
+	.su-div1 > div > span{
+		color: red;
+	}
+	.su-div1 > div > input{
+		margin: 0 10px;
+	}
+	.su-div1 > div > button{
+		margin: 0 10px;
+	}
+	.su-div1 > div > div{
+		margin: 5px 10px;
+	}
+	.su-div1:nth-child(2){
+		line-height: 34px;
+		height: 34px;
+
+	}
+	.su-div1 > div > select{
+		margin: 0 10px;
+	}
+	.money{
+		margin-left: 15px;
+		margin-bottom: 20px;
+		clear: both;
+		overflow: hidden;
+	}
+	.money > div{
+		float: left;
+		margin: 0 10px;
+		font-size: 18px;
+	}
+	.money > div:nth-child(1){
+		margin: 0 10px 0 0;
+	}
+	.money span{
+		color: red;
+		padding: 0 5px 0 10px;
+	}
+	.search > div > span{
+		line-height: 42px;
+		height: 42px;
+	}
+	.search > div > input{
+		margin-top: 11px;
+	}
+	#submit{
+		margin-left: 80px;
+	}
+	.details > div:nth-child(1){
+		float: left;
+		line-height: 42px;
+		height: 42px;
+	}
+	.details > div:nth-child(1) > span:nth-child(2){
+		padding-left: 5px;
+		border-left: 4px solid rgb(67, 142, 185);
+	}
+	.details > div:nth-child(2){
+		float: right;
+		margin-right: 20px;
+	}
+	.details > div:nth-child(2) > span{
+		padding-right: 20px;
+	}
+</style>
+<div class="main-content">
+
+	<div class="breadcrumbs" id="breadcrumbs" style="overflow: hidden;">
+		<ul class="breadcrumb">
+			<li> <i class="ace-icon fa fa-home home-icon"></i>
+				<a href="#">资金管理</a>
+			</li>
+			<li class="active">资金流水</li>
+		</ul>
+	</div>
+
+	<div class="su-main">	
+		<div style="font-size: 24px;text-align: center;">
+			恭喜您！您代理的设备已经累计产生收益：
+			<span style="color: red"><%=sum.sum_Purchase%></span>
+		</div>
+		
+		<div class="money">
+			<div>剩余总金额(元):<span><%=sum.sum_left%></span></div>
+			<div>已提现总金额(元):<span><%=sum.sum_widthraw%></span></div>
+			<div>可提现金额(元):<span><%=sum.sum_freeze%></span></div>
+			<div>已冻结金额(元):<span><%=sum.sum_canWidthraw%></span></div>
+		</div>
+
+		<div style="padding-left: 5px;border-left: 4px solid rgb(67, 142, 185);margin-left: 10px;">
+			资金流水
+		</div>
+
+		<form action="/funds/water" onsubmit="return onSearch()" method="post" id="searchForm">
+			<div class="su-div1 su-a">
+				<div>
+					<span>*</span>下单时间
+				</div>
+				<div>
+					<input id="startDate" name="startDate" value="<%=startDate%>">		
+					至
+					<input id="endDate" name="endDate" value="<%=endDate%>"/>		
+					<div>时间跨度最多支持31天</div>
+					<input id="currentPage" name="currentPage" type="hidden" value="<%=currentPage%>"/>
+					<input name="sum_Purchase" type="hidden" value="<%=sum.sum_Purchase%>"/>
+					<input name="sum_left" type="hidden" value="<%=sum.sum_left%>"/>
+					<input name="sum_widthraw" type="hidden" value="<%=sum.sum_widthraw%>"/>
+					<input name="sum_freeze" type="hidden" value="<%=sum.sum_freeze%>"/>
+					<input name="sum_canWidthraw" type="hidden" value="<%=sum.sum_canWidthraw%>"/>
+				</div>
+			</div>
+			
+			<div class="su-div1 su-select su-a">
+				<div>
+					<span>&nbsp;</span>入账类型
+				</div>
+				<div>
+					<select class="form-control" name="billType" id="billType">
+						<option value="">所有类型</option>
+						<option value="10">购买账单</option>
+						<option value="5">提现账单</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="su-div1 search su-a">
+				<div style="visibility: hidden;">
+					<span>&nbsp;</span>订单号
+				</div>
+				<div style="display: none;">
+					<input>
+				</div>
+				<button  type="submit" class="btn btn-primary">查询</button>
+			</div>	
+		</form>
+
+
+		<div class="details su-a">
+			<div>
+				<span>&nbsp;</span>
+				<span>流水明细列表</span>
+			</div>
+
+			<div>
+				<span style="padding-right: 20px;">下载资金流水:</span>
+
+				<form action="http://admin.emomo.cc/util/export/monthAccount.xls" method="post" onsubmit="return getxls()">
+					<input type="hidden" name="userPhone" value="<%=userPhone%>">
+					<input type="hidden" name="startDate" id="xlsstartDate">
+					<input type="hidden" name="endDate" id="xlsendDate">
+					<input type="hidden" name="billType" id="xlsbillType">
+					<button type="submit" class="btn btn-primary">导出excel表格式
+					</button>
+				</form>
+
+			</div>	
+		</div>
+
+		<div class="su-a">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>入账时间</th>
+						<th>账单号</th>
+						<th>账单类型</th>
+						<th>入账金额(元)</th>
+						<th>账单描述</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+					<%for(var i=0; i<data.length;i++){
+				
+						var time = new Date(data[i].billTime).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+
+						var type ;
+						var amount ;
+    					if(data[i].billType == 10){
+							type = '购买';
+							amount = data[i].purchaseAmount;
+    					}else if(data[i].billType == 5){
+							type = '提现';
+							amount = data[i].widthrawAmount;
+    					}%>
+					<tr>
+						<td class="center"><%=time%></td>
+						<td class="center"><%=data[i].accountSn%></td>
+						<td class="center"><%=type%></td>
+						<td class="center"><%=amount%></td>
+						<td class="center"><%=data[i].accountDesc%></td>
+						<td class="center">
+							<button type="button" class="btn btn-white btn-sm btn-primary" onclick="openDetail()" disabled="disabled">查看</button>
+						</td>
+					</tr>
+					<%}%>
+				</tbody>
+			</table>	
+		</div>
+		<div id="demo1" style="text-align: center;"></div>
+	</div><!-- ./su-main -->
+</div>
+
+
+
+<%include component/footer.ejs %>   
+<script src="/layui/layui.js"></script>
+<script>
+var currentPage = '<%= currentPage%>'
+
+layui.use(['layer','laydate','laypage'], function(){
+  	var laydate = layui.laydate;
+  	var layer = layui.layer;
+  	var laypage = layui.laypage;
+	var start = {
+		max: laydate.now(),
+		istoday: false,
+	};
+
+	var end = {
+		max: laydate.now(),
+		istoday: true,
+		choose: function(datas){
+		 	start.max = datas;
+		}
+	};
+ 
+	document.getElementById('startDate').onclick = function(){
+		start.elem = this;
+		laydate(start);
+	}
+ 	document.getElementById('endDate').onclick = function(){
+		end.elem = this;
+		laydate(end);
+	}
+	var currPage = <%= currentPage%> ;	
+	laypage({
+    	cont: 'demo1'
+    	,pages: <%=totalPages%> 
+    	,groups: 5
+    	,curr: currPage
+    	,skin: '#428bca'
+    	,jump: function(obj, first){
+      		if(!first){
+        		$("#currentPage").val(obj.curr);
+        		$('#searchForm').submit();                
+                layer.msg('第'+ obj.curr +'页');
+      		}
+    	}	
+  	});	
+});
+
+function onSearch() {
+ 	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	if (startDate == '') {
+		alert('请输入起始日期');
+		return false;
+	}
+	if (endDate == '') {	
+		alert('请输入结束日期');
+		return false;
+	}
+	if(Date.parse(startDate) > Date.parse(endDate)){
+		alert('日期格式错误');
+		return false;
+	}
+	return true
+}
+function getxls() {
+ 	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	var billType =$('#billType').val();
+	if (startDate == '') {
+		alert('请输入起始日期');
+		return false;
+	}
+	if (endDate == '') {	
+		alert('请输入结束日期');
+		return false;
+	}
+	if(Date.parse(startDate) > Date.parse(endDate)){
+		alert('日期格式错误');
+		return false;
+	}
+	
+	$('#xlsstartDate').val(startDate);
+	$('#xlsendDate').val(endDate);
+	$('#xlsbillType').val(billType);
+
+	return true;
+}
+
+
+</script>

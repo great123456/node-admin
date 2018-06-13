@@ -1,0 +1,139 @@
+   
+    <%include component/head.ejs %>
+
+    <div class="main-content">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <!-- <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script> -->
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">价格管理</a>
+                </li>
+                <li class="active">套餐管理</li>
+            </ul>
+        </div>
+
+  
+  <style type="text/css">
+       .price-btn{color:#ffffff;background:#009688;font-size:13px;cursor:pointer;border-radius:3px;display: inline-block;}
+       .btn-query{width:60px;color:#ffffff;background:#FF5722;font-size:16px;height:30px;line-height: 30px;border-radius: 5px;text-align: center;cursor: pointer;}
+  </style>
+
+        <div class="page-content">
+            <div class="page-content-area">
+                <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="widget-box">
+
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <form class="form-search" action="/super/factoryAdmin" id="searchForm">
+                                                        <input type="hidden" id="currentPage" name="currentPage">
+                                        </form>
+                                         <span class="input-group-btn">
+                                             <button type="button" id="addButton" class="btn btn-purple btn-sm" style="margin-left: 5px;" onclick="window.location.href = '/price/comboadd'">
+                                                添加套餐
+                                                 <i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+                                             </button>
+                                         </span>
+                                    </div>
+                                </div>
+                            </div>
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>套餐编号</th>
+                                    <th>套餐名称</th>
+                                    <th>套餐描述</th>
+                                    <th>更新时间</th>
+                                    <th>价格记录</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="combo-tbody">
+                                 <%for(var i=0;i<data.list.length;i++){%>
+                                 <tr>
+                                  <td><%= i %></td>
+                                  <td><%= data.list[i].packNum%></td>
+                                  <td><%= data.list[i].packName%></td>
+                                  <td><%= data.list[i].packDesc%></td>
+                                  <td class="updata-time"><%= data.list[i].updateTime%></td>
+                                   <td><p class="btn btn-white btn-sm btn-primary" onclick="window.location.href='/price/queryprice?packNum='+<%= data.list[i].packNum%>">查询</p></td>
+                                  <td class="col-xs-2">
+                                   <p class="btn btn-white btn-sm btn-primary" onclick="window.location.href='/price/querypriceadd?packNum='+<%= data.list[i].packNum%>">添加价格记录</p>
+                                   <p class="btn btn-white btn-sm btn-primary" onclick="window.location.href='/price/queryprice?packNum='+<%= data.list[i].packNum%>" style="margin-top:5px;">删除价格记录</p>
+                                   <p class="btn btn-white btn-sm btn-primary" onclick="window.location.href='/price/combosave?id='+<%= data.list[i].id%>+'&packNum='+<%= data.list[i].packNum%>" style="margin-top:5px;">修改信息</p>
+                                  </td>
+                                 </tr>
+                                <% }%>
+                                </tbody>
+                               
+                            </table>
+
+
+                            <div align="center" id="tablePageButton"/>
+
+                        </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <script type="text/javascript" src="/js/jquery.js" ></script>
+   <script type="text/javascript">
+     var len=$("#combo-tbody tr").length;
+     for(var i=0;i<len;i++){
+     	var time=$("#combo-tbody tr").eq(i).find('.updata-time').html();
+     	var atime=parseInt(time);
+     	var d=new Date(atime); 
+         $("#combo-tbody tr").eq(i).find('.updata-time').html(formatDate(d));
+     };
+ 
+     function formatDate(now){ 
+      var year=now.getFullYear(); 
+      var month=now.getMonth()+1;
+      if(month<10){
+        month='0'+month;
+      }else{
+        month=month;
+      };
+      var date=now.getDate(); 
+      var hour=now.getHours(); 
+      var minute=now.getMinutes();
+      if(minute<10){
+        minute='0'+minute;
+      }else{
+        minute=minute;
+      }; 
+      var second=now.getSeconds(); 
+      return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second; 
+      };
+   </script>
+   <!--  <script>
+        var totalPage = <%= data.totalPages %>;
+        var currPage = <%= data.currentPage%> ;
+    //调用分页
+    laypage({
+        cont: 'tablePageButton',
+        pages: totalPage,
+        curr: currPage,
+        jump: function(obj, first){ //触发分页后的回调
+            if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+                $("#currentPage").val(obj.curr);
+                $("#searchForm").submit();
+            }
+        }
+    });
+
+    </script> -->
+    <%include component/footer.ejs %>

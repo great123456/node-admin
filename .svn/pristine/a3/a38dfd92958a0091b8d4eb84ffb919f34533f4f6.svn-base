@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+var express=require("express"),router=express.Router(),fs=require("fs"),func=require("../core/func"),logger=require("../core/util/logger"),rest=require("../core/restUrl"),http=require("../core/util/http"),sd=require("silly-datetime");router.get("/index",function(a,b,c){data={},data.PRO_MENU={menu:"index",subMenu:"index"},b.render("index",data)}),router.get("/",function(a,b,c){b.redirect("index")}),module.exports=router;

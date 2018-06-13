@@ -1,0 +1,114 @@
+
+    <%include ../component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">子代理商</a>
+                </li>
+                <li class="active">新增</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+                <div class="row">
+                        <div class="col-xs-12">
+                            <div class="hr hr-24"></div>
+                            <form class="form-horizontal" role="form" action="/super/subProxyAdmin/add" method="POST">
+                                <!-- #section:elements.form -->
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">登录名称</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-1" placeholder="登录名称" class="col-xs-10 col-sm-5" name="loginName" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">手机号码</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-2" placeholder="手机号码" class="col-xs-10 col-sm-5" name="phone"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">用户密码</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-3" placeholder="用户密码" class="col-xs-10 col-sm-5" name="password"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">昵称名称</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="昵称名称" class="col-xs-10 col-sm-5" name="nickName"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">身份证号</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="身份证号" class="col-xs-10 col-sm-5" name="idNum"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">地址</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="地址" class="col-xs-10 col-sm-5" name="address"/>
+                                    </div>
+                                </div>
+
+                                <!-- /section:elements.form -->
+                                <div class="space-4"></div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="SUBMIT">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            提交
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <!--<button class="btn" type="reset">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            重置
+                                        </button>-->
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+
+
+                        </div><!-- /.span -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+    <script>
+
+
+    </script>
+    <%include ../component/footer.ejs %>

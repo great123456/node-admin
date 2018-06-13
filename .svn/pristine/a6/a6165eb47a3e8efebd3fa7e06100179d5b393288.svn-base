@@ -1,0 +1,341 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">场所</a>
+                </li>
+                <li class="active">编辑</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                        <div class="col-xs-12">
+                            <div class="hr hr-24"></div>
+                            <form id="updateForm" class="form-horizontal" role="form" action="/deviceRegion/update" method="POST">
+                                <!-- #section:elements.form -->
+,
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">场所的编号</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="number" value="<%= data.number%>"/>
+                                        <input disabled type="text" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" id="form-field-1" placeholder="场所的编号" class="col-xs-10 col-sm-5" name="number" value="<%= data.number%>"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">场所名称</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-1" placeholder="场所名称" class="col-xs-10 col-sm-5" name="name" value="<%= data.name%>"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">场所用途</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-2" placeholder="场所用途" class="col-xs-10 col-sm-5" name="desc" value="<%= data.description%>"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">场所地址</label>
+                                    <div class="col-xs-9">
+
+                                        <input type="text" disabled style="width:400px; margin-right:10px;" name="oldAddress" value="<%= data.address%>"/>
+                                            <div style="margin: 5px;">
+
+                                                <input type="text" id="cityName" style="width:400px; margin-right:10px;" name="address" value="<%= data.address%>"/>
+
+                                                <input type="button" value="查询"  onclick="theLocation()" style="margin-right:40px;"/>
+                                                维度：<input id="altitude" type="text" style="width:100px; margin-right:10px;" name="latitude" value="<%= data.latitude%>"/>
+                                                经纬：<input id="longitude" type="text" style="width:100px; margin-right:10px;" name="longitude" value="<%= data.longitude%>"/>
+                                                <input id="city" type="hidden" style="width:100px; margin-right:10px;" name="city" value="<%= data.townName%>"/>
+
+                                            </div>
+                                            <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+
+                                        <div id="allmap" style="width:870px;height:400px;"></div>
+                                    </div>
+                                </div>
+                                <% tmpImgUrl = data.imgUrl.split(","); %>
+                                <input type="hidden" name="img" id="uploadForm1Img" value="<%= tmpImgUrl[0] || ""%>"/>
+                                <input type="hidden" name="img" id="uploadForm2Img" value="<%= tmpImgUrl[1] || ""%>"/>
+                                <input type="hidden" name="img" id="uploadForm3Img" value="<%= tmpImgUrl[2] || ""%>"/>
+                            </form>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2">场所图片</label>
+
+                                <div class="col-sm-9">
+                                    <!--<input type="text" id="form-field-2" placeholder="场所用途" class="col-xs-10 col-sm-5" name="desc"/>-->
+
+
+                                    <div class="col-sm-3">
+                                        <div class="row">
+                                            <div class="deviceRegionPicture">
+                                                <img src="<%= tmpImgUrl[0] || "/image/picture.gif"%>">
+                                            </div>
+                                            <form id="uploadForm1" enctype="multipart/form-data">
+                                                <input type="file" name="file" onchange="doUpload('#uploadForm1')"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="row">
+                                            <div class="deviceRegionPicture">
+                                                <img src="<%= tmpImgUrl[1] || "/image/picture.gif"%>">
+                                            </div>
+                                            <form id="uploadForm2" enctype="multipart/form-data">
+                                                <input type="file" name="file" onchange="doUpload('#uploadForm2')"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="row">
+                                            <div class="deviceRegionPicture">
+                                                <img src="<%= tmpImgUrl[2] || "/image/picture.gif"%>">
+                                            </div>
+                                            <form id="uploadForm3" enctype="multipart/form-data">
+                                                <input type="file" name="file" onchange="doUpload('#uploadForm3')"/>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                                <!-- /section:elements.form -->
+                                <div class="space-4"></div>
+
+                                    <div class="col-md-offset-3 col-md-9" style="margin-left: 50%;margin-top: 20px;">
+                                        <button class="btn btn-info" onclick="formSubmit()">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            提交
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <!--<button class="btn" type="reset">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            重置
+                                        </button>-->
+                                    </div>
+
+
+
+
+
+
+                        </div><!-- /.span -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Gzw7oxudQHN1GPWVu5QBwA8LnDmWkTIo"></script>
+
+    <script type="text/javascript">
+        function G(id) {
+            return document.getElementById(id);
+        }
+        var longitude = <%= data.longitude%>;
+        var altitude  = <%= data.latitude%>;
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        var point = new BMap.Point(longitude,altitude);
+        map.centerAndZoom(point,15);
+
+        var marker = new BMap.Marker(point);  // 创建标注
+        map.addOverlay(marker);               // 将标注添加到地图中
+        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        var geoc = new BMap.Geocoder();
+
+        setTimeout(function(){
+            map.setZoom(15);
+        }, 2000);  //2秒后放大到14级
+        map.enableScrollWheelZoom(true);//允许缩放
+
+
+        var localSearch = new BMap.LocalSearch(map);
+        localSearch.enableAutoViewport(); //允许自动调节窗体大小
+
+
+        //建立一个自动完成的对象
+        var ac = new BMap.Autocomplete({
+            "input" : "cityName",
+            "location" : map
+        });
+
+
+        //查询结果
+        function theLocation(){
+            var city = G("cityName").value;
+            if(city == ""){
+                return;
+            }
+
+            //搜索
+            var keyword = city;
+            localSearch.setSearchCompleteCallback(function (searchResult) {
+                var poi = searchResult.getPoi(0);
+                longitude = poi.point.lng;
+                altitude  = poi.point.lat;
+                city      = poi.city;
+                G("altitude").value  = altitude;
+                G("longitude").value = longitude;
+                G("city").value      = city;
+                map.centerAndZoom(poi.point, 18);
+
+                map.clearOverlays();
+                // 创建标注，为要查询的地址对应的经纬度
+                var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));
+                marker.enableDragging();//可拖拽
+                //将结果进行拼接并显示到对应的容器内
+                marker.addEventListener("dragend", function(e){
+                    longitude = e.point.lng;
+                    altitude  = e.point.lat;
+                    G("altitude").value  = altitude;
+                    G("longitude").value = longitude;
+
+                    geoc.getLocation(e.point,function(rs){
+                        //console.log(rs);
+                        var addComp = rs.addressComponents;
+                        G("cityName").value = addComp.province
+                                + addComp.city
+                                + addComp.district
+                                + addComp.street
+                                + addComp.streetNumber;
+                        G("city").value = addComp.city;
+                    });
+
+                });
+                map.addOverlay(marker);
+
+
+                var infoWindow;
+                marker.addEventListener("click", function () {
+                    var cityName = G("cityName").value;
+                    var content = cityName + "<br/><br/>经度："
+                            + longitude
+                            + "<br/>纬度："
+                            + altitude;
+                    infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+                    this.openInfoWindow(infoWindow);
+                });
+                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                setTimeout(function () {
+                    marker.setAnimation(null); //取消动画
+                }, 2000);
+
+
+
+            });
+            localSearch.search(keyword);
+        }
+
+        //鼠标放在下拉列表上的事件
+        ac.addEventListener("onhighlight", function(e) {
+            var str    = "";
+            var _value = e.fromitem.value;
+            var value  = "";
+            if (e.fromitem.index > -1) {
+                value  = _value.province
+                        +  _value.city
+                        +  _value.district
+                        +  _value.street
+                        +  _value.business;
+            }
+            str = "FromItem<br />index = "
+                    + e.fromitem.index
+                    + "<br />value = "
+                    + value;
+
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province
+                        +  _value.city
+                        +  _value.district
+                        +  _value.street
+                        +  _value.business;
+            }
+            str += "<br />ToItem<br />index = "
+                    + e.toitem.index
+                    + "<br />value = "
+                    + value;
+            G("searchResultPanel").innerHTML = str;
+        });
+
+        var myValue;
+        //鼠标点击下拉列表后的事件
+        ac.addEventListener("onconfirm", function(e) {
+            var _value = e.item.value;
+            myValue = _value.province
+                    +  _value.city
+                    +  _value.district
+                    +  _value.street
+                    +  _value.business;
+            G("searchResultPanel").innerHTML = "onconfirm<br />index = "
+                    + e.item.index
+                    + "<br />myValue = "
+                    + myValue;
+            theLocation();
+        });
+
+        //G("cityName").value = "<%= data.address%>";
+        //theLocation();
+    </script>
+
+    <%include component/footer.ejs %>
+    <script type="text/javascript">
+
+        var doUpload = function(id)
+        {
+            //id = "#"+id;
+            var formData = new FormData($(id)[0]);
+            $.ajax({
+                url: 'http://dragon.uicp.cn:20002/util/file/upload',
+                type: 'POST',
+                cache: false,
+                data: new FormData($(id)[0]),
+                processData: false,
+                contentType: false
+            }).done(function(res) {
+                if(res.code != 0)
+                {
+                    alert(res.mes) ;
+                }else
+                {
+//                    $(id).parent().children(".deviceRegionPicture").children("img").attr("src",res.data[0])attr("src",res.data[0]);
+                    /*alert(res.data[0]);
+                     $(id).parent().children(".deviceRegionPicture").css("background","none");*/
+                    $(id).parent().children(".deviceRegionPicture").children("img").attr("src",res.data[0]);
+                    $(id+"Img").val(res.data[0]);
+                }
+
+            }).fail(function(res) {});
+        }
+
+        var formSubmit = function()
+        {
+            $("#updateForm").submit() ;
+        }
+
+    </script>

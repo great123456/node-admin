@@ -1,0 +1,103 @@
+/**
+ * 声明
+ * 请求的 url
+ */
+//远程服务器地址 120.76.78.33
+exports.urls = {
+
+        "sso":"http://u.emomo.cc/sso?appkey=yunkong&loginCallback=http://ykong.emomo.cc:42000/dologin",
+        "findlogin":"/user/find/login",
+        "userFindMenu":"/user-res/find-menu",
+
+
+        "emomo-yunkong":{
+                "host":"192.168.3.220",
+                "port":42220,
+                "findOrderById":"/order/id/{id}",
+                "findOrderBySn":"/order/sn/{sn}",
+                "findOrderPage":"/order/page",
+
+                "findDeviceRegionById"          :       "/deviceRegion/id",
+                "findDeviceRegionByNumber"      :       "/deviceRegion/number/",
+                "findDeviceRegionByPage"        :       "/deviceRegion/page",
+                "addDeviceRegion"               :       "/deviceRegion/add",
+                "updateDeviceRegion"               :       "/deviceRegion/update",
+                "delDeviceRegion"               :       "/deviceRegion/del/",
+                "deviceRegionAll"       :       "/deviceRegion/all/",
+
+                "findWxUserPage"                :       "/wxUser/page",
+                "findWxUserEvaluatePage"        :       "/evaluate/page",
+
+                "findBatchPage"                 :       "/batch/page",
+                "findBatchAll"                 :       "/batch/all",
+                "addBatch"                      :       "/batch/add",
+                "updateBatch"                   :       "/batch/update",
+                "findBatchById"                 :       "/batch/id/",
+
+                "findDeviceTypeById"            :       "/deviceType/id/",
+                "findDeviceTypePage"            :       "/deviceType/page",
+                "addDeviceType"                 :       "/deviceType/add",
+                "updateDeviceType"              :       "/deviceType/update",
+                "findDeviceTypeAll"             :       "/deviceType/all",
+
+
+                "findMyDevicePage"              :       "/device/dev/page",
+                "findDevicePage"                :       "/device/page",
+                "addDevice"                     :       "/device/add",
+                "findDeviceById"                :       "/device/id/",
+                "findDeviceBySn"                :       "/device/deviceSn/",
+                "updateDevice"                  :       "/device/update",
+                "cmdDevice"                     :       "/device/cmd/deviceSn/",
+                "findDeviceBySns"               :       "/device/deviceSns",
+                "allocationDevice"              :       "/device/allocation",
+                "proxyDevice"                   :       "/device/proxyDevice",
+                "bindDeviceRegion"              :       "/device/bind/region/", // /device/bind/region/{uid}
+                "unbindDeviceRegion"            :       "/device/unbind/region/", // /device/unbind/region/{uid}/{deviceSn}
+                "bindDeviceSubProxy"            :       "/device/bind/subProxy/",// /device/bind/subProxy/{uid}/{deviceSn}
+                "bindDeviceMoreSubProxy"        :       "/device/bind/more/subProxy/",// /device/bind/more/subProxy/{uid}/{deviceSn}
+                "unbindDeviceSubProxy"          :       "/device/unbind/subProxy/",// /device/bind/subProxy/{uid}/{deviceSn}
+                "shareDeviceSubProxy"           :       "/device/subProxy/share/",// /device/subProxy/share/{uid}/{deviceSn}
+                "getDeviceShare"                :       "/device/share/", // /device/share/{uid}/{deviceSn}")
+                "deleteBindDevice"              :       "/device/del/bind/",
+                "setSingleDeviceShare"          :       "/device/single/share/set",
+                "setBatchDeviceShare"           :       "/device/batch/share/set",
+                "setDeviceRegionShare"          :       "/deviceRegion/batch/share",
+                "deviceRegionDetail"            :       "/deviceRegion/detail",
+
+
+
+                "findDevicePriceByDeviceSn"     :       "/devicePrice/deviceSn/",
+                "addDevicePrice"     :       "/devicePrice/add",
+                "delDevicePrice"     :       "/devicePrice/del/",
+
+                "factoryDevice"         :       "/device/factory/page/",//  /device/factory/page/{uid}
+                "subProxyDevice"        :       "/device/subProxy/page/",//  /device/subProxy/page/{uid}
+                "findMyUsers"           :       "/device/userInfo",
+
+                "addUserPlatFormAdmin"       :"/base/register/platFormAdmin",
+                "addUserProxyAdmin"       :"/base/register/proxyAdmin",
+                "addUserFactoryAdmin"       :"/base/register/factoryAdmin",
+                "addSubProxyAdmin"       :"/base/register/subProxyAdmin"
+
+        },
+        "emomo-usersystem":{
+                "host":"192.168.3.220",
+                "port":30001,
+                "allUserByRole" : "/loginService/allUser/role",
+                "findUserByRole":"/loginService/user/role",
+                "findMyUsers"       :"/loginService/myUsers",
+                "login"       :"/loginService/login",
+                "adminlogin"       :"/loginService/rootLogin",
+                "updatePassword":"/loginService/update/passwd",
+                "findAllRole"   :"/loginService/all/roles"
+
+        },
+
+        "emomoDetail":{
+            "host": "192.168.3.220",
+            "port" : 40008,
+            "operationMouth" : '/report/list/order/month',
+            "operationDay" : '/report/list/order/day',
+            "operationOrder" : '/report/list/order/detail',
+        }
+}

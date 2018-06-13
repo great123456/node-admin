@@ -1,0 +1,294 @@
+var express = require('express');
+var router  = express.Router();
+
+var fs      = require("fs");
+var func    = require('../core/func');
+var logger  = require('../core/util/logger');
+var rest    = require('../core/restUrl').urls;
+var utils   = require('../core/util/utils');
+var http   = require('../core/util/http');
+var httpClient   = require('../core/util/httpClient').DHttpUtil;
+
+var PAGE_SIZE = 10 ;
+
+router.get('/mouth', function(req, res, next) {
+	console.log('-----mouth.get---------');
+	var currentPage = req.params.currentPage;
+
+	if (currentPage == undefined) {
+		currentPage = 1;
+	}
+
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var date = utils.get30day();
+	var startDate =date.startDate;
+	var endDate =date.endDate;
+
+	var body = {
+		userPhone: userPhone,
+		startDate: startDate,
+		endDate: endDate,
+		currentPage: currentPage, 
+	};
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.operationMouth,
+		body: JSON.stringify(body)
+	};
+
+	var data ={};
+	data.PRO_MENU = {"menu":"operation","subMenu":"mouth"};
+	data.currentPage = currentPage;
+	data.startDate = startDate ;
+	data.endDate = endDate ;
+	data.data =[];
+
+	http.doPost(restFulPotion,function(status,d){
+		console.log('------- d.data----------');
+		console.log(d.data);
+		if (status == 200 && d.data != undefined) {
+			data.data = d.data.datas;
+		}
+		console.log('-----http.doPost---------');
+		console.log(data);
+		res.render("operationMouth",data);		
+	});
+});
+
+router.post('/mouth', function(req, res, next) {
+	console.log('-----mouth.post---------');
+	console.log(req.body);
+
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var startDate = req.body.startDate;
+	var endDate = req.body.endDate;
+	var currentPage = req.body.currentPage;
+
+	if (startDate ==undefined || startDate ==''
+		||endDate ==undefined || endDate ==''
+		||currentPage==undefined||currentPage=='') {
+		return res.send('参数错误');
+	}
+	var body = {
+		userPhone: userPhone,
+		startDate: startDate,
+		endDate: endDate,
+		currentPage: currentPage, 
+	};
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.operationMouth,
+		body: JSON.stringify(body)
+	}
+
+	var data ={}
+	data.PRO_MENU = {"menu":"operation","subMenu":"mouth"};
+	data.currentPage = currentPage;
+	data.startDate = startDate ;
+	data.endDate = endDate ;
+
+	http.doPost(restFulPotion,function(status,d){
+		if(d!= undefined && status == 200 && d.code == 'SUCCESS'){
+			console.log(d.message);
+			if (d.message == 'RECORD_EMPTY') {
+				return res.send('指定时间内的记录数为空');
+			}else{
+				data.data = d.data.datas;
+				data.currentPage = currentPage;
+				console.log('-------post---mouth-----------');
+				console.log(data);
+				res.render("operationMouth",data);
+			}
+		}else{
+			return res.send('参数错误');
+		}
+	});
+});
+
+router.get('/day', function(req, res, next) {
+	var currentPage = req.params.currentPage;
+
+	if (currentPage == undefined) {
+		currentPage = 1;
+	}
+
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var date = utils.get30day();
+	var today = date.startDate;
+
+	var body = {
+		userPhone: userPhone,
+		today: today,
+		currentPage: currentPage, 
+	};
+
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.operationDay,
+		body: JSON.stringify(body)
+	}
+
+	var data ={}
+	data.PRO_MENU = {"menu":"operation","subMenu":"day"};
+	data.currentPage = currentPage;
+	data.today = today ;
+	data.data =[];
+
+	http.doPost(restFulPotion,function(status,d){	
+		if (status == 200 && d.data!= undefined) {
+			data.data = d.data.datas;
+		}
+		console.log('-----http.doPost---------');
+		console.log(data);
+		res.render("operationDay",data);		
+	});
+});
+
+router.post('/day', function(req, res, next) {
+	console.log('-------post---day-----------');
+	console.log(req.body);
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444
+	var today = req.body.today;
+	var currentPage = req.body.currentPage;
+
+	if (today ==undefined || today ==''
+		||currentPage==undefined||currentPage=='') {
+		return res.send('参数错误');
+	}
+	var body = {
+		userPhone: userPhone,
+		today: today,
+		currentPage: currentPage, 
+	};
+
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.operationDay,
+		body: JSON.stringify(body)
+	}
+
+	var data ={}
+	data.PRO_MENU = {"menu":"operation","subMenu":"day"};
+	data.currentPage = currentPage;
+	data.today = today ;
+
+	http.doPost(restFulPotion,function(status,d){
+		if(d!= undefined && status == 200 && d.code == 'SUCCESS'){
+			console.log('-------------d.message-----------');
+			console.log(d.message);
+			if (d.message == 'RECORD_EMPTY') {
+				return res.send('指定时间内的记录数为空');
+			}else{
+				data.data = d.data.datas;
+				console.log('-------post---day-----------');
+				console.log(data);
+				res.render("operationDay",data);
+			}
+		}else{
+			return res.send('参数错误');
+		}
+	});
+});
+router.get('/order', function(req, res, next) {
+	var currentPage = req.params.currentPage;
+	console.log(req.body);
+	if (currentPage == undefined) {
+		currentPage = 1;
+	}
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var date = utils.get30day();
+	var startDate =date.startDate;
+	var endDate =date.endDate;
+
+	var body = {
+		userPhone: userPhone,
+		startDate: startDate,
+		endDate: endDate,
+		currentPage: currentPage, 
+	};
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.operationOrder,
+		body: JSON.stringify(body)
+	}
+
+	var data ={}
+	data.PRO_MENU = {"menu":"operation","subMenu":"order"};
+	data.currentPage = currentPage;
+	data.startDate = startDate ;
+	data.endDate = endDate ;
+	data.data =[];
+
+	http.doPost(restFulPotion,function(status,d){	
+		if (status == 200 && d.data!= undefined) {
+			data.data = d.data.datas;
+		}
+		console.log('-----http.doPost---------');
+		console.log(data);
+
+		res.render("operationOrder",data);		
+	});
+});
+router.post('/order', function(req, res, next) {
+	console.log('----------order---post------------');
+	console.log(req.body);
+
+	//var userPhone = req.session.phone;
+	var userPhone = 13002414444;
+	var startDate = req.body.startDate;
+	var endDate = req.body.endDate;
+	var currentPage = req.body.currentPage;
+
+	if (startDate ==undefined || startDate ==''
+		||endDate ==undefined || endDate ==''
+		||currentPage==undefined||currentPage=='') {
+		return res.send('参数错误');
+	}
+	var body = {
+		userPhone: userPhone,
+		startDate: startDate,
+		endDate: endDate,
+		currentPage: currentPage, 
+	};
+	var restFulPotion = {
+		host: rest.emomoDetail.host,
+		port: rest.emomoDetail.port,
+		path: rest.emomoDetail.operationOrder,
+		body: JSON.stringify(body)
+	}
+
+	var data ={}
+	data.PRO_MENU = {"menu":"operation","subMenu":"order"};
+	data.currentPage = currentPage;
+	data.startDate = startDate ;
+	data.endDate = endDate ;
+
+	http.doPost(restFulPotion,function(status,d){
+		console.log('-------d-----------',d);
+		if(d!= undefined && status == 200 && d.code == 'SUCCESS'){
+			console.log(d.message);
+			if (d.message == 'RECORD_EMPTY') {
+				return res.send('指定时间内的记录数为空');
+			}else{
+				data.data = d.data.datas;
+				data.currentPage = currentPage;
+				console.log('-------post---mouth-----------');
+				console.log(data);
+				res.render("operationOrder",data);
+			}
+		}else{
+			return res.send('参数错误');
+		}
+	});
+});
+module.exports = router;

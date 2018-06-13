@@ -1,0 +1,87 @@
+var express = require('express');
+
+var router = express.Router();
+var rest = require('../core/restUrl').urls;
+var utils = require('../core/util/utils');
+var http = require('../core/util/http');
+
+router.get('/show', function(req, res) {
+  console.log("---信息展示页面---");
+  var params = req.query;
+  console.log(params);
+  if(params.finishTime){
+  	var time=params.finishTime;
+  	console.log(time);
+  	params.finishTime=time.substring(0,10);
+  	var finishTime=params.finishTime;
+  	console.log(finishTime);
+  }else{
+  	var finishTime='';
+  };
+  if(params.currentPage){
+  	var currentPage = params.currentPage;
+  }else{
+  	var currentPage ='';
+  };
+  if(params.devNumber){
+  	var devNumber=params.devNumber;
+  }else{
+    var devNumber='';
+  };
+  if(params.regionNumber){
+  	var regionNum=params.regionNumber;
+  }else{
+    var regionNum='';
+  };
+  if(params.settleStatus){
+  	var settleStatus=params.settleStatus;
+  }else{
+  	var settleStatus='';
+  }; 
+  if(params.orderSn){
+  	var orderSn=params.orderSn;
+  }else{
+  	var orderSn='';
+  };
+  if(params.settleType){
+  	var settleType=params.settleType;
+  }else{
+  	var settleType='';
+  };
+  var body={
+  	finishTime:finishTime,
+  	devNumber:devNumber,
+  	regionNum:regionNum,
+  	status:settleStatus,
+  	orderSn:orderSn,
+  	settleType:settleType,
+  	currentPage:currentPage,
+  	pageSize:'10'
+  };
+  var restFulPotion = {
+      host: '192.168.3.19',
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.messageshow,
+      body: JSON.stringify(body)
+  };
+  http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("信息展示页面请求成功");
+       	   console.log(d);
+       	   console.log(d.data.list[0]);
+       	   var data={
+       	     PRO_MENU: { menu: 'message', subMenu: 'show' },
+       	     data:d.data,
+       	     params:params
+       	   };
+           res.render('messagepage',data);
+       }else {
+           console.log("信息展示页面请求错误");
+       }
+  });
+
+  
+});
+
+module.exports = router;

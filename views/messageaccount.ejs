@@ -1,0 +1,200 @@
+   
+    <%include component/head.ejs %>
+
+    <div class="main-content">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <!-- <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script> -->
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">信息列表</a>
+                </li>
+                <li class="active">结算账单</li>
+            </ul>
+        </div> 
+  <style type="text/css">
+       .price-btn{color:#ffffff;background:#009688;font-size:13px;cursor:pointer;border-radius:3px;display: inline-block;}
+       .btn-query{width:60px;color:#ffffff;background:#FF5722;font-size:16px;height:30px;line-height: 30px;border-radius: 5px;text-align: center;cursor: pointer;}
+  </style>
+        <div class="page-content">
+            <div class="page-content-area">
+                <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="widget-box">
+
+                                <div class="widget-body" >
+                                  <div class="widget-main">
+                                   <form class="form-search" action="/message/account" id="searchForm">
+                                     <div class="row">
+                                        <div class="col-xs-12 col-sm-11">
+                                            <div class="input-group">
+                                                <input type="hidden" id="currentPage" name="currentPage"
+                                                       value="<%= data.currentPage %>">
+                                                <input type="text" class="search-query" placeholder="收款者uid" value="<%= params.payeeUid %>" name="payeeUid" />
+                                                <label style="margin-left:15px">开始日期:
+                                                 <input type="text" class="sang_Calender" name="beginTime" value="<%= params.beginTime %>" style="width:100px" />
+                                                </label>
+                                                <label style="margin-left:10px">截止日期:
+                                                 <input type="text" class="sang_Calender" name="finishTime" value="<%= params.finishTime %>"  style="width:100px"/>
+                                                </label>
+                                                <span class="input-group-btn">
+                        <button type="submit" class="btn btn-purple btn-sm">
+                          查找 <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                        </button>
+                        
+                        
+                      </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   </form>
+                                  </div>
+                                </div>
+                            </div>
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>结算单号</th>
+                                    <th>收款者uid</th>
+                                    <th>结算类型</th>
+                                    <th>金额</th>
+                                    <th>状态</th>
+                                    <th>结算方式</th>
+                                    <th>结算时间段</th>
+                                    <th>创建时间</th>
+                                    <th>修改时间</th>
+                                    <th>完成时间</th>
+                                    <th>备注</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="combo-tbody">
+                                   <%for(var i=0;i<data.list.length;i++){%>
+                                   <tr>
+                                    <td><%= data.list[i].uuid%></td>
+                                    <td class="userId"><%= data.list[i].payeeUid%></td>
+                                    <td class="type"><%= data.list[i].settlementType%></td>
+                                    <td><%= data.list[i].amount%>元</td>
+                                    <td class="status"><%= data.list[i].status%></td>
+                                    <td class="way"><%= data.list[i].settlementWay%></td>
+                                    <td class="content"><%= data.list[i].content%></td>
+                                    <td class="create-time"><%= data.list[i].createTime%></td>
+                                    <td class="updata-time"><%= data.list[i].updateTime%></td>
+                                    <td class="finish-time"><%= data.list[i].finishTime%></td>
+                                    <td class="finish-time"><%= data.list[i].remark%></td>
+                                    <td><p class="btn btn-white btn-sm btn-primary btn-account">详情</p></td>
+                                   </tr>
+                                  <% }%>
+                                </tbody>
+                               
+                            </table>
+
+
+                            <div align="center" id="tablePageButton"/>
+
+                        </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <script type="text/javascript" src="/js/datetime.js" ></script>
+   <script type="text/javascript" src="/js/jquery.js" ></script>
+   <script type="text/javascript">
+      
+      var len=$("#combo-tbody tr").length;
+      for(var i=0;i<len;i++){
+        var way=parseInt($("#combo-tbody tr").eq(i).find('.way').html());
+        if(way==1){
+          $("#combo-tbody tr").eq(i).find('.way').html("现金结算");
+        };
+        if(way==2){
+          $("#combo-tbody tr").eq(i).find('.way').html("转账结算");
+        };
+        if(way==3){
+          $("#combo-tbody tr").eq(i).find('.way').html("余额扣除");
+        };
+        var status=parseInt($("#combo-tbody tr").eq(i).find('.status').html());
+        if(status==1){
+          $("#combo-tbody tr").eq(i).find('.status').html("收款者审核");
+        };
+        if(status==2){
+          $("#combo-tbody tr").eq(i).find('.status').html("付款者确认");
+        };
+        if(status==3){
+          $("#combo-tbody tr").eq(i).find('.status').html("付款者拒绝");
+        };
+        if(status==4){
+          $("#combo-tbody tr").eq(i).find('.status').html("收款者确认");
+        };
+        if(status==5){
+          $("#combo-tbody tr").eq(i).find('.status').html("完成");
+        };
+        var type=parseInt($("#combo-tbody tr").eq(i).find('.type').html());
+        if(type==1){
+          $("#combo-tbody tr").eq(i).find('.type').html("交易结算");
+        };
+        if(type==2){
+          $("#combo-tbody tr").eq(i).find('.type').html("服务费结算");
+        };
+      	
+        var createtime=parseInt($("#combo-tbody tr").eq(i).find('.create-time').html());
+        console.log(createtime);
+        var b=new Date(createtime);
+        $("#combo-tbody tr").eq(i).find('.create-time').html(formatDate(b));
+      };
+
+      $(".btn-account").click(function(){
+        var content=$(this).parent().siblings('.content').html();
+          var beginTime=content.substring(0,10);
+          var finishTime=content.substring(13,23);
+          var userId=$(this).parent().siblings('.userId').html();
+          window.location.href='/message/show?userId='+userId+'&beginTime='+beginTime+'&finishTime='+finishTime;
+        });
+ 
+     function formatDate(now){ 
+      var year=now.getFullYear(); 
+      var month=now.getMonth()+1;
+      if(month<10){
+        month='0'+month;
+      }else{
+        month=month;
+      };
+      var date=now.getDate(); 
+      var hour=now.getHours(); 
+      var minute=now.getMinutes();
+      if(minute<10){
+        minute='0'+minute;
+      }else{
+        minute=minute;
+      }; 
+      var second=now.getSeconds(); 
+      return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second; 
+      };
+   </script>
+   <script>
+        var totalPage = <%= data.totalPages %>;
+        var currPage = <%= data.currentPage%> ;
+    //调用分页
+    laypage({
+        cont: 'tablePageButton',
+        pages: totalPage,
+        curr: currPage,
+        jump: function(obj, first){ //触发分页后的回调
+            if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+                $("#currentPage").val(obj.curr);
+                $("#searchForm").submit();
+            }
+        }
+    });
+
+   </script>
+    <%include component/footer.ejs %>

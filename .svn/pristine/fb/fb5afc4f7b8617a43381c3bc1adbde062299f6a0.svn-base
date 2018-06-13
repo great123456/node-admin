@@ -1,0 +1,265 @@
+/**
+ * Created by dragon on 16-7-19.
+ * 通用配置
+ */
+
+//引入初始化函数
+var func = require('./initCore');
+
+/**
+ * 基础配置
+ * @type {{base: {port: string}, redis: {host: string}}}
+ */
+exports.initBase = {
+    //基础全局配置
+    base:{
+        SERVER_NAME:"emomoBms",
+        SERVER_PORT: 9913,//服务启动端口
+        ENV:"development", //development product
+        contextPath:""//网站前缀
+    },
+
+    //session配置
+    sessionOption:{
+        type:{
+            local:"local",//使用本地
+            redis:"redis"//使用redis
+        },
+        select:"local",//如果选择 local则使用本地,否则使用redis
+        opt:{
+            session_key: "sid",
+            secret:"node",
+            resave:true,
+            saveUninitialized:true
+        },
+        conf:{
+            host:"yk.emomo.cc",
+            port:6378,
+            ttl:2592000,
+            prefix:"node_"
+        }
+    },
+
+    //cookies配置
+    cookiesOption:{
+        domain:".emomo.cc",
+        path:"/",
+        maxAge:86400000,
+        secure:false,
+        httpOnly:true
+    },
+
+    //过滤器配置
+    filtersOption:{
+        type:{
+            backend:"backend",//后台,在urls填写则不拦截
+            fortend:"fortend"//前台,在url填写则拦截
+        },
+        select:"backend",//声明前台还是后台
+        loginUrl:"/member/login",//登录接口
+        urls:[ //添加过滤连
+            "/member/login",
+            '/member/login/admin',
+            '/member/admin/dologin'
+        ],
+        isCheckRole:true,
+        roles:{
+            //代理商
+            "INDUSTRY_AGENT" : ['/index','/member/updatePassword','/member/logout','/proxyDevice/page',
+                '/proxyDevice/update','/proxyDevice/price/add','/proxyDevice/price/del','/proxyDevice/cmd',
+                '/proxyDevice/bindRegion','/proxyDevice/bindRegionPage','/proxyDevice/unbindRegion',
+                '/proxyDevice/bindSubProxyPage','/proxyDevice/bindSubProxy','/proxyDevice/unbindSubProxy',
+                '/deviceRegion/page','/deviceRegion/add','/deviceRegion/update','/member/updatepassword',
+                '/super/subProxyAdmin','/super/subProxyAdmin/add','/deviceRegion/share/page','/deviceRegion/share/set/page',
+                '/deviceRegion/setRegionBatchShare','/deviceRegion/detail'
+                ,'/error/devicepage'
+                ,'/error/orderpage'
+                ,'/funds/water'
+                ,'/funds/getxml'
+                ,'/operation/day'
+                ,'/operation/mouth'
+                ,'/operation/order'
+                ,'/site/page'
+                ,'/site/child'
+                ,'/site/childOne'
+                ,'/site/delete'
+            ],
+            //子代理商|场地管理员
+            "CITY_OPERATOR" : ['/index','/member/updatePassword','/member/logout','/roleDevice/page',
+                '/roleDevice/device','/member/updatepassword','/order/page'
+            ],
+            //厂商
+            "FACTORY_ADMIN" : ['/index','/member/updatePassword','/member/logout','/roleDevice/page',
+                '/roleDevice/device','/member/updatepassword'
+            ],
+            //平台管理员
+            "YUNKONG_PLATFORM_ADMIN" : ['/index','/member/updatePassword','/member/logout','/batch/page','/batch/add',
+                '/batch/update','/device/page','/device/add','/device/update','/device/price/add','/device/price/del',
+                '/device/cmd','/device/allocation','/device/allocationPage','/deviceType/page','/deviceType/add',
+                '/deviceType/update','/order/page','/super/platfrom','/super/platfrom/add','/super/proxyAdmin',
+                '/super/proxyAdmin/add','/super/subProxyAdmin','/super/subProxyAdmin/add','/super/factoryAdmin',
+                '/super/factoryAdmin/add','/super/role','/wxUser/page','/wxUser/evaluatePage',
+                '/device/batch/add', '/device/share/page','/batch/share/page','/batch/share/batchadd/page',
+                '/device/delete/bind','/device/single/setShare/page','/device/single/share/set','/batch/setShare/page',
+                '/batch/share/set',
+		        '/device/updatePrice',
+                '/device/setParm',
+                '/card/page',
+                '/card/add',
+                '/device/card/support',
+                '/refund/page',
+                '/refund/detail',
+                '/refund/check'
+            ],
+            //超级管理员
+            "SUPER_ADMIN" : ['/index','/member/logout','/super/platfrom','/super/role',
+                '/member/updatePassword','/super/platfrom','/super/platfrom/add'
+            ]
+        }
+    },
+
+
+    //错误配置
+    errorOption:{
+        isWebApi:false,//是否web api
+        errorPage:"error", //生产环境
+        devErragePage:"error",  //开发环境
+        errJson:{//错误信息
+            code:"-1",
+            message:"系统请求异常",
+            data:undefined,
+            version:"1.0"
+        }
+    },
+
+
+    //日志配置
+    loggerOption:{
+        "customBaseDir" :"/apps/logs/project/node/emomoBms",
+        "customDefaultAtt" :{
+            "type": "dateFile",
+            "absolute": true,
+            "alwaysIncludePattern": true
+        },
+        "appenders": [
+            {"type": "console", "category": "console"},
+            {"pattern": "debug_yyyyMMddhh.logs", "category": "logDebug"},
+            //{"pattern": "warn_yyyyMMddhh.logs", "category": "logWarn"},
+            //{"pattern": "error_yyyyMMddhh.logs", "category": "logErr"},
+            //{"pattern": "trace_yyyyMMddhh.logs", "category": "logTrace"},
+            //{"pattern": "fatal_yyyyMMddhh.logs", "category": "logFatal"},
+            {"pattern": "info_yyyyMMddhh.logs", "category": "logInfo"}
+        ],
+        "replaceConsole": true,
+        "levels":{ "logDebug": "DEBUG", "logInfo": "INFO", "logWarn": "WARN", "logErr": "ERROR","logTrace":"TRACE","logFatal":"FATAL","console":"debug"}
+    },
+
+
+    //http https 默认选项
+    httpOption:{
+        host:"127.0.0.1",
+        port:80,
+        httpType:"http",
+        postType:"json"
+    },
+
+
+    //redis 配置
+    redisOption:{
+        isStart:false,//是否启动
+        host:"pay.emomo.cc",
+        port:6379,
+        expire:60,
+        option:{}
+    },
+
+    //redis-cluster 配置
+    redisClusterOption:{
+        isStart:false,
+        address:[
+            {host:"192.168.0.133",port:6379},
+            {host:"192.168.0.133",port:6380},
+            {host:"192.168.0.133",port:6381},
+            {host:"192.168.0.133",port:6382},
+            {host:"192.168.0.133",port:6383},
+            {host:"192.168.0.133",port:6384}
+        ]
+    },
+
+
+    //路由配置
+    routesOption:[
+        {"route":"index","path":"/"},
+        {"route":"superAdmin","path":"/super"},
+        {"route":"mes","path":"/mes"},
+        {"route":"order","path":"/order"},
+        {"route":"deviceRegion","path":"/deviceRegion"},
+        {"route":"wxUser","path":"/wxUser"},
+        {"route":"batch","path":"/batch"},
+        {"route":"deviceType","path":"/deviceType"},
+        {"route":"device","path":"/device"},
+        {"route":"proxyDevice","path":"/proxyDevice"},
+        {"route":"member","path":"/member"},
+        {"route":"roleDevice","path":"/roleDevice"},
+        {"route":"error","path":"/error"},
+        {"route":"funds","path":"/funds"},
+        {"route":"operation","path":"/operation"},
+        {"route":"site","path":"/site"},
+        {"route":"card","path":"/card"},
+        {"route":"refund","path":"/refund"}
+	
+    ]
+
+
+
+};
+
+/**
+ * 初始化环境函数
+ */
+exports.intiFunc = function(app){
+    console.log("初始化环境...");
+
+    //返回结果
+    var result = {};
+
+    var utils = require("./util/utils");
+    //从环境||配置文件获取端口
+    var port = utils.normalizePort(process.env.PORT || this.initBase.base.SERVER_PORT);
+    result.port = port;
+
+    //调用初始化函数
+    func.intiFunc(app,this.initBase);
+
+    return result;
+};
+
+
+/**
+ * 设置cookies
+ * @param res
+ * @param key
+ * @param value
+ */
+exports.setCookies = function(res,key,value){
+    func.setCookies(res,key,value,this.initBase.cookiesOption);
+}
+
+
+
+/**
+ * 删除cookies
+ * @param res
+ * @param key
+ * @param value
+ */
+exports.deleteCookies = function(res,key){
+    var cookiesOption={
+        domain:this.initBase.cookiesOption.domain,
+        path:this.initBase.cookiesOption.path,
+        maxAge:0,
+        secure:false,
+        httpOnly:true
+    };
+    func.setCookies(res,key,undefined,cookiesOption);
+}

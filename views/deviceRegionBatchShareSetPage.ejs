@@ -1,0 +1,112 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">设备管理</a>
+                </li>
+                <li class="active">绑定子代理商</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="hr-24"></div>
+                            <br/>
+                            <form class="form-horizontal" role="form" action="/deviceRegion/setRegionBatchShare" method="POST">
+
+                                <input type="hidden" value="<%=regionId%>" id="regionId" name="regionId">
+
+                                <!-- #section:elements.form -->
+
+
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="center">登录名</th>
+                                        <th class="center">手机号</th>
+                                        <th class="center">分润比例</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% subProxyAdmin.list.forEach(function(info){ %>
+                                        <tr>
+                                        <td class="center">
+                                            <input type="hidden" name="subProxyUserId" value="<%=info.uid%>"/>
+                                            <%=info.loginName%>
+                                        </td>
+                                        <td class="center">
+                                            <%= info.phone %>
+                                        </td>
+                                        <td class="center">
+                                            <input type="text" name="subProxyUserRate" placeholder="0.1~0.9" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+                                        </td>
+                                        </tr>
+                                    <% })%>
+
+                                    </tbody>
+                                </table>
+
+                                <div class="col-sm-12">
+                                    <p class="col-sm-5"></p>
+                                    <p id="errorMsg" class="col-sm-3 red"><%=errorMsg%></p>
+                                </div>
+                                <!-- /section:elements.form -->
+                                <div class="space-4"></div>
+
+                        </div><!-- /.span -->
+
+
+
+                    <div class="clearfix form-actions">
+                        <div class="col-md-offset-5 col-md-9">
+                            <button class="btn btn-info" type="SUBMIT">
+                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                提交
+                            </button>
+
+                            &nbsp; &nbsp; &nbsp;
+                        </div>
+                    </div>
+
+                    </form>
+
+
+                </div><!-- /.row -->
+
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+
+
+    <%include component/footer.ejs %>
+
+    <script type="text/javascript">
+        $("#factorySelect").change(function(){
+            $("#factoryName").val($("#factorySelect").find("option:selected").text());
+        });
+
+    </script>

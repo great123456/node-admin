@@ -1,0 +1,57 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">信息</a>
+                </li>
+                <li class="active">操作结果</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row" style="margin: 50px">
+                    提示信息：<%= mes %> &nbsp;&nbsp; <a id="backUrl" href="<%= backUrl %>"></a>
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+    <script>
+
+        var timeOut = 3;
+        timeoutId = window.setInterval(function () {
+            if(timeOut > 0)
+            {
+                timeOut -- ;
+                $("#backUrl").text(timeOut +"秒后跳回，点击立即跳回")
+
+            }else
+            {
+                window.location.href = $("#backUrl").attr("href");
+                clearInterval(timeoutId);
+            }
+        }, 1000);
+
+    </script>
+    <%include component/footer.ejs %>

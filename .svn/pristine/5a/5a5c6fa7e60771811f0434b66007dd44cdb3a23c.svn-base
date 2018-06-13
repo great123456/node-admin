@@ -1,0 +1,230 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">设备管理</a>
+                </li>
+                <li class="active">场地详细页面</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="widget-box">
+
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <div class="form-search"  id="searchForm">
+                                            <div class="row">
+                                                <div class="col-xs-8 col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+															<button type="submit" onclick="location.reload()" class="btn btn-purple btn-sm">
+                                                                重新加载
+                                                            <i class="ace-icon fa fa-refresh icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-header col-xs-12">
+                                设备信息:
+                            </div>
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="center">
+                                        编号
+                                    </th>
+                                    <th>设备编号</th>
+                                    <th>设备名称</th>
+                                    <th>设备类型</th>
+                                    <th>批次</th>
+                                    <th class="center">总收益(元)</th>
+                                    <th class="center">总工作时间(min)</th>
+                                    <th>状态</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <% data.devicePage.list.forEach(function(info,n){ %>
+                                    <tr>
+                                        <td class="center">
+                                            <%=n+1%>
+                                        </td>
+
+                                        <td class="center">
+                                            <%= info.deviceSn%>
+                                        </td>
+                                        <td class="center"> <%= (info.deviceName) %> </td>
+                                        <td class="center"> <%= info.deviceType %> </td>
+                                        <td class="center"> <%= info.batchNum %> </td>
+                                        <td class="center"> <%= info.allPay %> </td>
+                                        <td class="center"> <%= info.allWorkTime %> </td>
+                                        <td class="center"> <%= info.statusDesc %> </td>
+
+                                <% })%>
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+                            <div align="center" id="tablePageButton"/>
+
+                        </div><!-- /.span -->
+
+
+                    <div class="table-header col-xs-12">
+                        子代理商信息:
+                    </div>
+                    <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="center">
+                                编号
+                            </th>
+                            <th class="center">登录名称</th>
+                            <th class="center">手机号码</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% data.subProxyUserList.forEach(function(info,n){ %>
+                        <tr>
+                            <td class="center">
+                                <%=n+1%>
+                            </td>
+
+                            <td class="center">
+                                <%= info.loginName%>
+                            </td>
+                            <td class="center"> <%= (info.mobile) %> </td>
+                            <% })%>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div class="table-header col-xs-12">
+                        场地信息:
+                    </div>
+                    <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                        <tr>
+                            <td>编号</td>
+                            <td><%=data.deviceRegion.number%></td>
+                        </tr>
+                        <tr>
+                            <td>名称</td>
+                            <td><%=data.deviceRegion.name%></td>
+                        </tr>
+                        <tr>
+                            <td>地址</td>
+                            <td><%=data.deviceRegion.address%>&nbsp;&nbsp;
+                                (经度:<%=data.deviceRegion.longitude%>,维度:<%=data.deviceRegion.latitude%>)</td>
+                        </tr>
+                        <tr>
+                            <td>代理商</td>
+                            <td><%=data.deviceRegion.ownerName%></td>
+                        </tr>
+                        <tr>
+                            <td>总收益(元)</td>
+                            <td><%=data.regionAllDevicePay%></td>
+                        </tr>
+                        <tr>
+                            <td>设备总工作时间(min)</td>
+                            <td><%=data.regionAllDeviceWorkTime%></td>
+                        </tr>
+                        <tr>
+                            <td>场地环境</td>
+                            <td id="regionEnv">
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" id="regionImgs" value="<%=data.deviceRegion.imgUrl%>">
+
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+
+
+    <script type="text/javascript">
+
+        var totalPage = '<%= data.devicePage.totalPages %>';
+        var currPage  = '<%= data.devicePage.currentPage%>' ;
+        //调用分页
+        laypage({
+            cont: 'tablePageButton',
+            pages: totalPage,
+            curr: currPage,
+            jump: function(obj, first){ //触发分页后的回调
+                if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+                    $("#currentPage").val(obj.curr);
+                    $("#searchForm").submit();
+                }
+            }
+        });
+
+
+    </script>
+
+
+    <%include component/footer.ejs %>
+    <script>
+        $(document).on('click', 'th input:checkbox' , function(){
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+                    .each(function(){
+                        this.checked = that.checked;
+                        $(this).closest('tr').toggleClass('selected');
+                    });
+        });
+
+
+    </script>
+
+    <script>
+
+        $(function(){
+            var imgs = $("#regionImgs").val();
+            //console.log(imgs);
+            var imageUrls = JSON.parse(imgs);
+            //console.log(imageUrls);
+
+            var div = "";
+            jQuery.each(imageUrls,function (n,value) {
+                console.log(value);
+                div +='<img style="width: 200px;margin: 0 10px 0 10px;" src="'+ value +'">';
+            });
+
+            $("#regionEnv").html(div);
+
+        });
+    </script>

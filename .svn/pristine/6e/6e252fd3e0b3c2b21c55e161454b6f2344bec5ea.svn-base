@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+ace.auto_container=function(a){a(window).on("resize.auto_container",function(){var b=ace.vars.window.width>1140;try{ace.settings.main_container_fixed(b,!1,!1)}catch(c){b?a(".main-container,.navbar-container").addClass("container"):a(".main-container,.navbar-container").removeClass("container"),a(document).trigger("settings.ace",["main_container_fixed",b])}}).triggerHandler("resize.auto_container")};

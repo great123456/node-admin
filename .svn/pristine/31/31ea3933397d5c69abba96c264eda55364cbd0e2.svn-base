@@ -1,0 +1,394 @@
+var express = require('express');
+
+var router = express.Router();
+var rest = require('../core/restUrl').urls;
+var utils = require('../core/util/utils');
+var http = require('../core/util/http');
+
+router.get('/combo', function(req, res) {
+  console.log("---combo---");
+  console.log("价格套餐");
+  var params = req.query;
+  var currentPage = params.currentPage == "" ? 1 : params.currentPage;
+  var body={
+  	currentPage:currentPage,
+  	pageSize:5
+  };  
+  var restFulPotion = {
+      host: rest.emomoYunkong.host,
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.pricecombo,
+      body: JSON.stringify(body)
+  };
+  
+  http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("返回分页请求数据");
+       	   console.log(d);
+       	   var data={
+       	     PRO_MENU: { menu: 'price', subMenu: 'combo' },
+       	     data:d.data
+       	   };
+       	   console.log(data);
+       	   console.log(data.data.list[0]);
+       	   res.render('combo',data);
+       } else {
+           console.log("分页请求错误");
+       }
+  });
+  
+});
+
+router.get('/device', function(req, res, next) {
+   params = req.query ;
+   console.log("---device---");
+   console.log("---请求我的设备---");
+   console.log(params);
+
+});
+
+
+router.get('/setprice', function(req, res) {
+  console.log("---setprice---");
+  console.log("设备价格设置");
+    params = req.query;
+    currentPage = params.currentPage == "" ? 1 : params.currentPage;
+    var body={
+    	currentPage:currentPage,
+    	pageSize:10,
+    	deviceSn:params.deviceSn,
+    	deviceName:params.deviceName,
+    	deviceType:params.deviceType,
+    	shareStatus:params.shareStatus
+    };
+    var restFulPotion = {
+        host: rest.emomoYunkong.host,
+        port: rest.emomoYunkong.port,
+        path: rest.emomoYunkong.findMyDevicePage,
+        body: JSON.stringify(params)
+    };
+    console.log("----123---");
+    var shareStatus = params.shareStatus;
+    http.doPost(restFulPotion,function(status,data){
+        if(data!= undefined && status == 200 && data.code == "0"){
+        	console.log("---请求我的设备---");
+        	console.log(data);
+        	console.log(data.data.list[0]);
+            data.PRO_MENU ={"menu":"price","subMenu":"setprice"};
+            data.keywords ={
+                "shareStatus" : shareStatus,
+                "deviceType"  : params.deviceType,
+                "deviceName"  : params.deviceName,
+                "deviceSn"    : params.deviceSn
+            };
+            res.render("setprice",data);
+        }else{
+            utils.pageMessage(req,res,data.mes,"/device/page","device","devicePage");
+        }
+   });
+
+});
+
+router.post('/setdeviceprice', function(req, res) {
+   var params=req.body;
+   console.log("---setdeviceprice-----");
+   console.log(params);
+   var body=[];
+   body.push(params);
+   console.log(body);
+   var restFulPotion = {
+       host: rest.emomoYunkong.host,
+       port: rest.emomoYunkong.port,
+       path: rest.emomoYunkong.setdeviceprice,
+       body: JSON.stringify(body)
+   };
+   http.doPost(restFulPotion, function(status, d) {
+
+        if (d != undefined && status == 200 && d.code == '0') {
+        	   console.log("----设置价格属性成功----");
+        	   console.log(d);
+           res.redirect('/price/setprice');
+        } else {
+            console.log("设置价格属性请求错误");
+        }
+   });
+     
+
+});
+
+router.post('/pricerecord', function(req, res) {
+   console.log("----价格记录----");
+   var params=req.body;
+   console.log(params);
+   var data={
+     PRO_MENU: { menu: 'price', subMenu: 'combo' },
+     params:params
+   };
+   res.render('pricerecord',data);
+});
+
+router.post('/setpricerecord', function(req, res) {
+  console.log("---修改价格记录---");
+  var params=req.body;
+  console.log(params);
+  var restFulPotion = {
+      host: rest.emomoYunkong.host,
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.setpricerecord,
+      body: JSON.stringify(params)
+  };
+  http.doPost(restFulPotion, function(status, d) {
+
+        if (d != undefined && status == 200 && d.code == '0') {
+        	   console.log("----修改价格记录请求成功----");
+        	   console.log(d);
+            res.redirect('/price/queryprice?packNum='+d.data.packNum);
+        } else {
+            console.log("修改价格记录请求错误");
+        }
+   });
+
+});
+
+
+router.post('/setalldeviceprice', function(req, res) {
+   console.log("---批量绑定设备套餐-----");
+   var params=req.body;
+   console.log(params);
+   var body=[];
+   var deviceSn=JSON.parse(params.deviceSn);
+   console.log(deviceSn);
+   for(var i=0;i<params.length;i++){
+           var obj={};
+           obj.deviceSn=deviceSn[i];
+           obj.packNum=params.packNum;
+           obj.priceProperty=params.priceProperty;
+           body.push(obj);
+      	};
+   console.log(body);
+   var restFulPotion = {
+       host: rest.emomoYunkong.host,
+       port: rest.emomoYunkong.port,
+       path: rest.emomoYunkong.setdeviceprice,
+       body: JSON.stringify(body)
+   };
+   http.doPost(restFulPotion, function(status, d) {
+
+        if (d != undefined && status == 200 && d.code == '0') {
+        	   console.log("----批量绑定设备套餐请求成功----");
+        	   console.log(d);
+           res.json(d.code);
+        } else {
+            console.log("批量绑定设备套餐请求错误");
+        }
+   });
+     
+
+});
+
+router.get('/package', function(req, res) {
+   console.log("----查询所有套餐---");
+   var restFulPotion = {
+       host: rest.emomoYunkong.host,
+       port: rest.emomoYunkong.port,
+       path: rest.emomoYunkong.pricePackage
+   };
+   http.doGet(restFulPotion, function(status, d) {
+       if (d != undefined && status == 200 && d.code == '0') {
+       	  console.log("查询全部套餐请求成功");
+       	  console.log(d);
+           res.json(d);
+       } else {
+          console.log("价格记录查询请求失败");
+       }
+   });
+
+});
+
+
+router.get('/queryprice', function(req, res) {
+  console.log("---queryprice---");
+  console.log("价格记录查询");
+  var params=req.query.packNum;
+  console.log('params:'+params);
+  var restFulPotion = {
+      host: rest.emomoYunkong.host,
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.queryprice.replace("{ packNum }",params)
+  };
+
+  http.doGet(restFulPotion, function(status, d) {
+      if (d != undefined && status == 200 && d.code == '0') {
+      	   console.log(d);
+      	   var arr=d.data;
+      	   for(var i=0; i<arr.length; i++){
+      	   	var minvalue=parseInt(arr[i].price);
+      	   	console.log(minvalue);
+      	  	var min=arr[i];
+      	  	var minindex=i;
+            for(var j=i+1; j<arr.length;j++){
+             	var value=parseInt(arr[j].price);
+                if(minvalue>value){
+                 	min=arr[j];
+                	minindex=j;
+                }
+              };
+              arr.splice(i,0,min);
+              arr.splice(minindex+1,1);
+      	   };
+      	  console.log(arr);
+          var data={
+            PRO_MENU: { menu: 'price', subMenu: 'combo' },
+            data:arr
+          };
+          res.render('queryprice',data);
+      } else {
+         console.log("价格记录查询请求失败");
+      }
+  });
+
+});
+
+router.get('/querypriceadd', function(req, res) {
+   var packNum=req.query.packNum;
+   console.log("--querypriceadd--");
+   console.log("新增价格记录");
+   console.log(packNum);
+   var data={
+   	 PRO_MENU: { menu: 'price', subMenu: 'combo' },
+   	 packNum:packNum
+   };
+   res.render('querypriceadd',data);
+});
+
+router.post('/queryadd', function(req, res) {
+   var params=req.body;
+   console.log("--queryadd--");
+   console.log("添加价格记录请求");
+   console.log(params);
+   var restFulPotion = {
+       host: rest.emomoYunkong.host,
+       port: rest.emomoYunkong.port,
+       path: rest.emomoYunkong.queryadd,
+       body: JSON.stringify(params)
+   };
+   http.doPost(restFulPotion, function(status, d) {
+
+        if (d != undefined && status == 200 && d.code == '0') {
+        	   console.log("添加价格记录成功");
+        	   console.log(d);
+            res.redirect('/price/combo');
+        } else {
+            console.log("添加价格记录请求错误");
+        }
+   });
+ 
+});
+
+
+router.get('/comboadd', function(req, res) { 
+   var data={
+    PRO_MENU: { menu: 'price', subMenu: 'combo' }
+   };
+   res.render('comboadd',data);
+});
+
+router.get('/remove', function(req, res) {
+   var params=req.query;
+   console.log("---价格记录删除---");
+   console.log(params);
+   var restFulPotion = {
+      host: rest.emomoYunkong.host,
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.queryremove.replace("{packNum}",params.packNum).replace("{id}",params.id)
+   };
+   http.doGet(restFulPotion, function(status, d) {
+      if (d != undefined && status == 200 && d.code == '0') {
+      	  console.log(d);
+      	  console.log("code:"+d.code);
+      	  if(d.code==0){
+      	  	var data={
+      	  		index:params.index,
+      	  		num:0
+      	  	};
+      	  	res.json(data);
+      	  }else{
+      	  	var data={
+      	  		index:params.index,
+      	  		num:1
+      	  	};
+      	  	res.json(data);
+      	  };
+          
+      } else {
+         console.log("价格记录删除请求失败");
+      }
+  });
+  
+});
+
+router.get('/combosave', function(req, res) {
+   var params=req.query;
+   console.log("---combosave---");
+   console.log(params);
+   console.log(params.packNum);
+   var data={
+    PRO_MENU: { menu: 'price', subMenu: 'combo' },
+    packNum:params.packNum,
+    id:params.id
+   };
+   res.render('combosave',data);
+
+});
+
+router.post('/pricepackage', function(req, res) {
+    var body=req.body;
+    console.log("---修改套餐信息---");
+    console.log(body);
+    var restFulPotion = {
+        host: rest.emomoYunkong.host,
+        port: rest.emomoYunkong.port,
+        path: rest.emomoYunkong.pricePackageupdate,
+        body: JSON.stringify(body)
+    };
+
+    http.doPost(restFulPotion, function(status, d) {
+         if (d != undefined && status == 200 && d.code == '0') {
+         	   console.log("修改套餐信息成功");
+         	   console.log(d);
+             res.redirect('/price/combo');
+         } else {
+             console.log("修改套餐信息修改请求错误");
+         }
+    });   
+
+});
+
+
+router.post('/add', function(req, res) {
+  var body=req.body;
+  console.log("---success-add--");
+  console.log(body);
+  var restFulPotion = {
+      host: rest.emomoYunkong.host,
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.comboadd,
+      body: JSON.stringify(body)
+  };
+
+  http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("添加套餐成功");
+       	   console.log(d);
+           res.redirect('/price/combo');
+       } else {
+           console.log("添加套餐请求错误");
+       }
+  });
+
+ 
+});
+
+module.exports = router;

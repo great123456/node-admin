@@ -1,0 +1,157 @@
+
+    <%include component/head.ejs %>
+
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">分润管理</a>
+                </li>
+                <li class="active">单个设备分润</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                        <div class="col-xs-12">
+                            <label>设备: &nbsp;</label><%=deviceSn%> &nbsp;分润比例设置
+                            <div class="hr hr-24"></div>
+                            <div class="form-horizontal" role="form" >
+                                <!-- #section:elements.form -->
+
+
+                                <input type="hidden" value="<%=deviceSn%>" id="deviceSn">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">平台占有比例</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" placeholder="0.1~1.0" id="platformUserRate"  name="platformUserRate" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">代理商占有比例</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" placeholder="0.1~1.0" id="regionProxyUserRate"  name="regionProxyUserRate" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">厂商占有比例</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  placeholder="0.1~1.0" id="factoryUserRate" name="factoryUserRate" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <p class="col-sm-3 red">注意:总比例不能超过1.0</p>
+                                    <p class="col-sm-5" style="color: red;" id="shareError"></p>
+                                </div>
+
+                                <!-- /section:elements.form -->
+                                <div class="space-4"></div>
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button onclick="setSingleShare()" class="btn btn-info" type="SUBMIT">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            提交
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div><!-- /.span -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+
+    <%include component/footer.ejs %>
+
+
+    <script>
+
+        function setSingleShare(){
+
+            var deviceSn = $("#deviceSn").val();
+            var platformUserRate = $("#platformUserRate").val();
+            var regionProxyUserRate = $("#regionProxyUserRate").val();
+            var factoryUserRate = $("#factoryUserRate").val();
+
+            $("#shareError").html("");
+
+            if (platformUserRate == undefined || platformUserRate== ''){
+                $("#shareError").html("请填写平台分润比例");
+                return;
+            }
+            if (regionProxyUserRate == undefined || regionProxyUserRate== ''){
+                $("#shareError").html("请填写代理商分润比例");
+                return;
+            }
+
+            if (factoryUserRate == undefined || factoryUserRate== ''){
+                $("#shareError").html("请填写厂商分润比例");
+                return;
+            }
+
+            var total = platformUserRate*1 + regionProxyUserRate*1 + factoryUserRate*1;
+
+            if(total > 1.0){
+                $("#shareError").html("请填分润比例不能超过1.0");
+                return;
+            }else if(total < 1.0){
+                platformUserRate = 1 - (regionProxyUserRate*1 + factoryUserRate*1);
+                $("#platformUserRate").val(platformUserRate);
+                if(!confirm("平台分润比例将设置为:"+platformUserRate+"\n,是否确定?")){
+                    return;
+                }
+            }
+
+            var postData = {
+                deviceSn:deviceSn,
+                platformUserRate:platformUserRate,
+                regionProxyUserRate:regionProxyUserRate,
+                factoryUserRate:factoryUserRate
+            };
+            $.post("/device/single/share/set",postData, function (data) {
+                if(data.code == '0'){
+                    $("#platformUserRate").val("");
+                    $("#regionProxyUserRate").val("");
+                    $("#factoryUserRate").val("");
+                    $("#shareError").html("请填分润比例设置成功");
+                }else{
+                    $("#shareError").html("请填分润比例设置失败");
+                }
+            });
+        }
+
+    </script>
+
+
+    <script type="text/javascript">
+        $("#factorySelect").change(function(){
+            $("#factoryName").val($("#factorySelect").find("option:selected").text());
+        });
+
+    </script>

@@ -1,0 +1,372 @@
+<% include component/head.ejs %>
+
+<style type="text/css">
+    .su-main{
+        overflow: hidden;
+        padding: 20px 0 0 40px;
+        font-size: 16px;
+        margin-right: 20px;
+    }
+    .title{
+        float: left;
+        font-size: 20px;
+    }
+    .title > span:nth-child(1){
+        font-weight: bolder;
+        padding: 0 10px;
+    }
+    .title > span:nth-child(2){
+        color: red;
+        padding: 0 10px;
+    }
+    .centerA{
+        vertical-align: middle;
+    }
+</style>
+
+
+<div class="main-content">
+    <div class="breadcrumbs" id="breadcrumbs" style="overflow: hidden;">
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">账户管理</a>
+            </li>
+            <li class="active">销售管理</li>
+        </ul>
+    </div>
+
+
+    <div class="su-main">
+
+        <h4>销售人员管理</h4>
+        <div class="widget-box">
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <span class="input-group-btn">
+                         <button type="button" id="addButton" class="btn btn-purple btn-sm" style="margin-left: 5px;" onclick="window.location.href = '/super/operatorAdmin/add'">
+                            添加
+                             <i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+                         </button>
+                     </span>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+
+                <th>登录名</th>
+                <th>手机号码</th>
+                <th>总设备数</th>
+                <th>设备总盈利(元)</th>
+                <th>操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <% data.list.forEach(function(info){ %>
+            <tr>
+                <td class="center"><%= info.loginName %></td>
+                <td class="center"> <%= info.phone %> </td>
+                <td class="center"> <%= info.allDevice %> </td>
+                <td class="center"> <%= info.allPay %> </td>
+                <td class="center">
+
+                    <button type="button" data-toggle="modal" data-target="#addModal" class="btn btn-white btn-sm btn-primary" onclick="addAddlist('<%=info.loginName%>','<%=info.uid%>')">绑定场所</button>
+                    <button type="button" data-toggle="modal" data-target="#deleteModal" class="btn btn-white btn-sm btn-primary" onclick="deleteAddList('<%=info.loginName%>','<%=info.uid%>')">解绑</button>
+                </td>
+            </tr>
+            <% }) %>
+
+            </tbody>
+        </table>
+
+
+
+        <form class="form-search" action="/super/operatorAdmin" id="searchForm">
+            <input type="hidden" id="currentPage" name="currentPage"
+                   value="<%= data.keywords.currentPage %>">
+        </form>
+
+        <div id="addModal" class="modal fade" tabindex="-1" style="padding-right: 17px;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header no-padding">
+                        <div class="table-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                <span class="white">×</span>
+                            </button>
+                            所有场所
+                        </div>
+                    </div>
+
+                    <div class="modal-body no-padding">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                            <tr>
+                                <th>场所编号</th>
+                                <th> 场所地址</th>
+                            </tr>
+                            </thead>
+                            <tbody id="addbody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer no-margin-top">
+                        <div style="margin-bottom: 10px;" action="/market/add" method="post">
+                            <input name="uid" value="" type="hidden" id="adduid">
+                            <span>姓名<input id="addname"></span>
+                            <span style="margin-left: 10px;">绑定场所<input name="number" value="" id="addnumber"></span>
+                            <input value="提交" type="submit" class="btn btn-white btn-sm btn-primary" onclick="setAddByUid() ">
+                        </div>
+
+                        <div align="center" id="addPageButton"/>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+
+
+        <div id="deleteModal" class="modal fade" tabindex="-2" style="padding-right: 17px;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header no-padding">
+                        <div class="table-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                <span class="white">×</span>
+                            </button>
+                            <span id="deletename"></span>  拥有场所
+                            <input id="deleteuid" type="hidden">
+                        </div>
+                    </div>
+
+                    <div class="modal-body no-padding">
+                        <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                            <thead>
+                            <tr>
+                                <th>场所编号</th>
+                                <th>场所地址</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="deletebody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer no-margin-top">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div id="demo1" style="text-align: center;"></div>
+</div>
+
+</div>
+
+
+<% include component/footer.ejs %>
+
+<script>
+    var totalPage='<%= data.totalPages %>';
+    var currPage = '<%= data.currentPage %>';
+
+    // 添加使用
+    var cpage = 1;
+    var tpage = 100;
+
+    // 删除使用
+    var dcpage = 1;
+    var dtpage = 100;
+
+    //调用分页
+    laypage({
+        cont: 'demo1',
+        pages: totalPage,
+        curr: currPage,
+        jump: function (obj, first) { //触发分页后的回调
+            if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr
+                $("#currentPage").val(obj.curr);
+                $("#searchForm").submit();
+            }
+        }
+    });
+
+
+    //调用分页
+    laypage({
+        cont: 'addPageButton',
+        pages: tpage,
+        curr: cpage,
+        jump: function (obj, first) {
+            if (!first) {
+                addAddlist($('#addname').val(),$('#adduid').val(),obj.curr);
+            }
+        }
+    });
+
+
+    //调用分页
+    laypage({
+        cont: 'deletePageButton',
+        pages: dtpage,
+        curr: dcpage,
+        jump: function (obj, first) { //触发分页后的回调
+            if (!first) {
+                deleteAddList($('#deletename').text(),$('#deleteuid').val(),obj.curr);
+            }
+        }
+    });
+
+
+    function addAddlist(loginName,uid,ccpage) {
+
+        ccpage = ccpage || 1;
+
+        $('#addname').val(loginName);
+        $('#adduid').val(uid);
+
+        var data ={
+            currentPage:ccpage
+        }
+        $.ajax({
+            url: '/market/region',
+            type: 'POST',
+            data:data,
+            error: function(xhr, textStatus, errorThrown) {
+
+            },
+            success: function(data, textStatus, xhr) {
+
+                if (data.code ==500){
+                    alert(data.mes);
+                    $('#addModal').modal('hide');
+                    return;
+                }
+                tpage = data.totalPage;
+                cpage = data.currentPage;
+                toAddList(data.list);
+            }
+        });
+    };
+
+    function toAddList(list) {
+        $('#addbody').html("");
+        var str ='';
+        for (var i =0 ;i<list.length;i++){
+            str =str + `<tr><td>${list[i].number}</td><td>${list[i].name}</td></tr>`;
+        }
+        $('#addbody').append(str);
+    };
+
+    function setAddByUid() {
+        var d2 = {
+            uid: $('#adduid').val(),
+            number: $('#addnumber').val(),
+        };
+        if (d2.uid =='' ||d2.uid==undefined ||d2.number==''||d2.number==''){
+            alert('参数错误');
+            return;
+        }
+        $.ajax({
+            url: '/market/add',
+            type: 'POST',
+            data:d2,
+            error: function(xhr, textStatus, errorThrown) {
+
+            },
+            success: function(data, textStatus, xhr) {
+
+                if (data.code ==500){
+                    alert(data.mes);
+                    return;
+                }
+                alert(data.data);
+            }
+        });
+    };
+
+    function deleteAddList(loginName,uid,ccpage) {
+
+        ccpage = ccpage || 1;
+        $('#deletename').text(loginName);
+        $('#deleteuid').val(uid);
+        var data ={
+            currentPage:ccpage,
+            uid:uid
+        }
+
+        $.ajax({
+            url: '/market/page',
+            type: 'POST',
+            data:data,
+            error: function(xhr, textStatus, errorThrown) {
+            },
+            success: function(data, textStatus, xhr) {
+                if (data.code ==500){
+                    alert(data.mes);
+                    $('#deleteModal').modal('hide');
+                    return false;
+                }
+                dtpage = data.totalPage;
+                dcpage = data.currentPage;
+                toDeleteList(data.list);
+            }
+        });
+    }
+
+    function toDeleteList(list) {
+
+        $('#deletebody').html("");
+        var str ='';
+        for (var i =0 ;i<list.length;i++){
+            str =str + `<tr>
+                            <td>${list[i].number}</td>
+                            <td>${list[i].name}</td>
+                            <td><input  value="删除" type="submit" class="btn btn-white btn-sm btn-primary" onclick="setDeleteByUid('${list[i].puid}','${list[i].id}') "></td>
+                        </tr>`;
+        }
+
+        $('#deletebody').append(str);
+    };
+
+    function setDeleteByUid(uid,id) {
+        var data ={
+            uid:uid,
+            id:id
+        }
+        $.ajax({
+            url: '/market/delete',
+            type: 'POST',
+            data:data,
+            error: function(xhr, textStatus, errorThrown) {
+
+            },
+            success: function(data, textStatus, xhr) {
+                console.log('---------setDeleteByUid-------------');
+                console.log(data);
+                if (data.code ==500){
+                    alert(data.mes);
+                    $('#deleteModal').modal('hide')
+                    return false;
+                }else {
+                    //alert('删除成功');
+                    deleteAddList($('#deletename').text(),$('#deleteuid').val());
+                }
+
+            }
+        });
+    }
+
+</script>

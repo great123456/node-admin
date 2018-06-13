@@ -1,0 +1,125 @@
+
+ <%include component/head.ejs %>
+ <div class="main-content">
+   <div class="breadcrumbs" id="breadcrumbs">
+       <!-- <script type="text/javascript">
+           try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+       </script> -->
+
+       <ul class="breadcrumb">
+           <li>
+               <i class="ace-icon fa fa-home home-icon"></i>
+               <a href="#">价格管理</a>
+           </li>
+           <li class="active">价格记录查询</li>
+       </ul>
+   </div>
+
+   <style type="text/css">
+        .price-btn{width:50px;height:25px;color:#ffffff;background:#009688;font-size:15px;cursor:pointer;border-radius:3px;line-height:25px;text-align: center;}
+   </style>
+
+   <div class="page-content">
+       <div class="page-content-area">
+           <div class="row">
+                   <div class="col-xs-12">
+                           <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                           <thead>
+                           <tr>
+                               
+                               <th>序号</th>
+                               <th>ID</th>
+                               <th>套餐编号</th>
+                               <th>价格</th>
+                               <th>按摩模式</th>
+                               <th>功能命名</th>
+                               <th>按摩时间</th>
+                               <th>操作</th>
+                           </tr>
+                           </thead>
+                           <tbody class="tbody">
+                            <%for(var i=0;i<data.data.length;i++){%>
+                            <tr>
+                             <td class="index"><%= i %></td>
+                             <td class="id"><%= data.data[i].id%></td>
+                             <td class="packnum"><%= data.data[i].packNum%></td>
+                             <td><%= data.data[i].price%>元</td>
+                             <td><%= data.data[i].func%></td>
+                             <td><%= data.data[i].functionCmd%></td>
+                             <td><%= data.data[i].workTime%>分钟</td>
+                             <td><p class="price-btn" >删除</p></td>
+                            </tr>
+                           <% }%>
+                           </tbody>
+                          
+                       </table>
+
+
+                       <div align="center" id="tablePageButton"/>
+
+                   </div>
+
+
+
+
+
+           </div>
+       </div>
+   </div>
+
+ </div>
+
+ <script type="text/javascript" src="/js/jquery.js" ></script>
+ <script type="text/javascript">
+
+    $(".price-btn").click(function(){
+     	var id=$(this).parent().siblings('.id').html();
+     	var packNum=$(this).parent().siblings('.packnum').html();
+     	var index=$(this).parent().siblings('.index').html();
+     		var a=confirm("确定删除");
+     		if(a==true){
+     			$.ajax({
+     				type:'GET',
+     				url:'/price/remove',
+     				data:{
+     					packNum:packNum,
+     					id:id,
+     					index:index
+     				},
+     				success:function(result){
+     	             if(result.num==0){
+                 	   $(".tbody tr").eq(result.index).remove();
+                     };
+                      
+     				}
+     			});
+     		}else{
+     			console.log(123);
+     		};
+     });
+
+    function remove(id,packNum){
+     	var a=confirm("确定删除");
+     	if(a==true){
+     		$.ajax({
+     			type:'GET',
+     			url:'/price/remove',
+     			data:{
+     				packNum:packNum,
+     				id:id
+     			},
+     			success:function(result){
+                 if(result.num==0){
+                 	$(".tbody tr").eq(result.index).remove();
+                 };
+     			}
+     		});
+     	}else{
+     		console.log(123);
+     	};
+     };
+
+ </script>
+
+ <%include component/footer.ejs %>
+

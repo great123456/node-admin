@@ -1,0 +1,12 @@
+.deviceRegionPicture{
+    width: 206px;
+    height: 200px;
+    margin: 0;
+    border: solid #F7F7F7 2px;
+
+    background: #F7F7F7  no-repeat scroll center center;;
+}
+.deviceRegionPicture img{
+    width: 206px;
+    vertical-align:middle;
+}

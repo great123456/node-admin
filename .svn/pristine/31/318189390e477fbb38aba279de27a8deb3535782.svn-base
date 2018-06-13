@@ -1,0 +1,437 @@
+
+<%include component/head.ejs %>
+
+<!-- /section:basics/sidebar -->
+<div class="main-content">
+<!-- #section:basics/con+tent.breadcrumbs -->
+<div class="breadcrumbs" id="breadcrumbs">
+  <script type="text/javascript">try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}</script>
+
+  <ul class="breadcrumb">
+    <li> <i class="ace-icon fa fa-home home-icon"></i>
+      <a href="#">设备管理</a>
+    </li>
+    <li class="active">设备管理</li>
+  </ul>
+</div>
+
+<!-- /section:basics/content.breadcrumbs -->
+<div class="page-content">
+  <style type="text/css">
+  .su1 > .switch{   
+    display:none;   
+  }   
+  .su1 > label{   
+    position:relative;   
+    display: block;   
+    padding: 1px;   
+    border-radius: 24px;   
+    height: 22px;   
+    margin-bottom: 15px;   
+    background-color: #eee;   
+    cursor: pointer;   
+    vertical-align: top;   
+    -webkit-user-select: none;   
+  }   
+  .su1 > label:before{   
+    content: '';   
+    display: block;   
+    border-radius: 24px;   
+    height: 22px;   
+    background-color: white;   
+    -webkit-transform: scale(1, 1);   
+    -webkit-transition: all 0.3s ease;   
+  }   
+  .su1 > label:after{   
+    content: '';   
+    position: absolute;   
+    top: 50%;     
+    left: 50%;     
+    margin-top: -11px;     
+    margin-left: -11px;   
+    width: 22px;   
+    height: 22px;   
+    border-radius: 22px;   
+    background-color: white;   
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.08);   
+    -webkit-transform: translateX(-9px);   
+    -webkit-transition: all 0.3s ease;   
+  }   
+  .su1 > .switch:checked~label:after{   
+    -webkit-transform: translateX(9px);   
+  }   
+  .su1 > .switch:checked~label:before{   
+    background-color:green;   
+  }
+  #allprice{width:500px;background:#ffffff;border:1px solid #f8f8f8;position: fixed;top:100px;left:50%;margin-left:-150px;display: none;}
+  </style>
+  <!-- /section:settings.box -->
+  <div class="page-content-area">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="widget-box">
+          <div class="widget-body">
+            <div class="widget-main">
+              <form class="form-search" action="/price/setprice" id="searchForm">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-11">
+                    <div class="input-group">
+                      <input type="hidden" id="currentPage" name="currentPage" value="<%= data.currentPage %>
+                      ">
+                      <input type="text" class="search-query" placeholder="设备编号" value="<%= keywords.deviceSn %>
+                      " name="deviceSn"/>
+                      <input type="text" class="search-query" placeholder="设备名称" value="<%= keywords.deviceName %>
+                      " name="deviceName"/>
+                      <input type="text" class="search-query" placeholder="设备类型" value="<%= keywords.deviceType %>
+                      " name="deviceType"/>
+                      <select class="search-query" name="shareStatus" style="margin-left: 5px;">
+                        <option <%if(keywords.shareStatus=='0'){%>
+                          selected
+                          <%}%>value="0">全部</option>
+                        <option <%if(keywords.shareStatus=='1'){%>
+                          selected
+                          <%}%>value="1">已分配</option>
+                        <option <%if(keywords.shareStatus=='2'){%>
+                          selected
+                          <%}%>value="2">未分配</option>
+                      </select>
+
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn btn-purple btn-sm">
+                          查找 <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+                        </button>
+                        
+                        <button type="button" id="batchAddButton" class="btn btn-purple btn-sm" data-toggle="modal" data-target="#allModal" style="margin-left: 5px;">
+                          批量添加
+                          <i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="center">
+                <label class="position-relative">
+                  <!--<input type="checkbox" class="ace" />
+                  -->
+                  <span class="lbl"></span>
+                </label>
+              </th>
+              <th>卡卷支持</th>
+              <th>设备编号</th>
+              <th>设备ID</th>
+              <th>设备名称</th>
+              <th>设备类型</th>
+              <th>批次</th>
+              <th>所在场所</th>
+              <th>价格套餐编号</th>
+              <th>价格套餐名称</th>
+              <th>价格属性</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% 
+        
+              for (var i = 0; i < data.list.length; i++) {
+                var info = data.list[i];
+             %>
+            <tr>
+              <td class="center">
+                <label class="position-relative">
+                  <input 
+                  type="checkbox" class="ace" name="checkDeviceSn" value="
+                  <%= info.deviceSn%>
+                  "/>
+                  <span class="lbl"></span>
+                </label>
+              <td class="center">
+                <div class="su1">  
+                    <input id="checked_<%=i%>" type="checkbox" class="switch"
+                    name="checkcard" value="<%= info.deviceSn%>" <%=info.cardSupport ==1?'checked=""':''%> />  
+                    <label for="checked_<%=i%>"></label>  
+                </div>
+              </td>
+
+              </td>
+                <td class="center">
+                    <%= info.devNumber%></td>
+              <td class="center">
+                <%= info.deviceSn%></td>
+              <td class="center">
+                <%=(info.deviceName) %></td>
+              <td class="center">
+                <%=info.deviceType %></td>
+              <td class="center">
+                <%=info.batchNum %></td>
+              <td class="center">
+                <%=info.location %></td>
+              </td>
+              <td class="center">
+               <%=info.packNum %></td>
+              </td>
+              <td class="center">
+              </td>
+              <td class="center">
+                <%=info.priceProperty%></td>
+              <td class="center">
+               <button type="button" class="btn btn-white btn-sm btn-primary" data-toggle="modal" data-target="#myModal" onclick="toSetdeviceSn('<%=info.deviceSn%>')">设置价格属性</button>
+              </td>
+              
+            </tr>
+            <%}%>
+          </tbody>
+        </table>
+          
+          
+     
+
+        <div align="center" id="tablePageButton"/></div>
+
+        <form id="deviceCmdForm" action="/device/cmd" method="post" hidden>
+          <input type="hidden" name="deviceSn" id="deviceSn"/>
+          <input type="hidden" name="cmd" id="cmd"/>
+          <input type="hidden" name="callback" id="callback"/>
+        </form>
+
+        <form id="deviceAllocationForm" action="/device/allocationPage" method="post">
+          <input type="hidden" name="deviceSns" id="deviceSns"/>
+          <input type="hidden" name="callback" id="callback1"/>
+        </form>
+
+        <form id="cardform" action="/device/card/support" method="post">
+          <input type="hidden" name="cardList" id="cardList">
+          <input type="hidden" name="currentPage" value="<%= data.currentPage%>">
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">设置价格模式</h4>
+      </div>
+
+      <form action="/price/setdeviceprice" method="post">
+        <label style="margin:20px;">设备ID:
+         <input type="text" name="deviceSn" id="deviceSn1">
+        </label>
+        <input type="hidden" name="priceProperty" id="priceProperty" value="1">
+        <br/>
+        <label style="margin:20px;margin-top:0px;">价格套餐:
+         <select name="packNum" id="set-one-price">
+      
+         </select>
+         
+        </label>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="allprice" >
+  <div class="modal-header">
+        <button type="button" class="close bclose" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">设置价格模式</h4>
+  </div>
+   <label style="margin:20px;">价格套餐:
+    <select id="select-price">
+         
+    </select>
+   </label>
+
+   <div class="modal-footer">
+     <button type="button" class="btn btn-default bclose" >关闭</button>
+     <button class="btn btn-primary" id="btn-price">提交</button>
+   </div>
+</div>
+
+<%include component/footer.ejs %>
+<script type="text/javascript">
+
+    var totalPage = '<%= data.totalPages %>';
+    var currPage  = '<%= data.currentPage%>' ;
+    //调用分页
+    laypage({
+        cont: 'tablePageButton',
+        pages: totalPage,
+        curr: currPage,
+        jump: function(obj, first){ //触发分页后的回调
+            if(!first){ //点击跳页触发函数自身，并传递当前页：obj.curr
+                $("#currentPage").val(obj.curr);
+                $("#searchForm").submit();
+            }
+        }
+    });
+    
+     buildHTML = function(tag, html, attrs) {
+       if (typeof (html) != 'string') {
+         attrs = html;
+         html = null;
+       }
+       var h = '<' + tag;
+       for (attr in attrs) {
+         if (attrs[attr] === false) continue;
+         h += ' ' + attr + '="' + attrs[attr] + '"';
+       }
+       return h += html ? ">" + html + "</" + tag + ">" : "/>";
+     };
+
+    function onload(){
+       $.ajax({
+       	type:'GET',
+       	url:'/price/package',
+       	data:'',
+       	success:function(result){
+         console.log(result.data);
+         var len=result.data.length;
+         for(var i=0;i<len;i++){
+           var option= buildHTML("option",result.data[i].packDesc,{
+                    value:result.data[i].packNum
+                  });
+           $('#select-price').append(option);
+           $('#set-one-price').append(option);
+          };
+         
+       	}
+       });
+    };
+    onload();
+
+    var openUpdateWin = function(id)
+    {
+        window.location.href = "/device/update?id="+id;
+    }
+
+    var deviceCmd = function(deviceSn,cmd)
+    {
+        $("#deviceSn").val(deviceSn);
+        $("#cmd").val(cmd);
+        $("#callback").val(window.location.pathname + window.location.search) ;
+        $("#deviceCmdForm").submit();
+    }
+  
+    var toSetdeviceSn =function (deviceSn) {
+
+        $("#deviceSn1").val(deviceSn);
+    }
+
+
+    var valArr=[];
+    var priceProperty=1;
+    var body=[];
+    function deviceAllocation(){
+        $("input[name='checkDeviceSn']:checked").each(function(i){
+            var val=parseInt($(this).val());
+            valArr.push(val);
+            console.log(valArr[i]);
+        });
+        console.log(valArr);
+        $("#allprice").show();
+        $("#btn-price").click(function(){
+        	var packNum=$("#select-price").val();
+        	addprice(packNum);
+        });
+    };
+    
+    function addprice(packNum){
+        var length=valArr.length;
+      	$.ajax({
+            	type:'post',
+            	url:'/price/setalldeviceprice',
+            	data:{
+            		deviceSn:JSON.stringify(valArr),
+            		packNum:packNum,
+            		priceProperty:priceProperty,
+            		length:length
+            	},
+            	success:function(result){
+                 var re=parseInt(result);
+                 if(re==0){
+                 	window.location.href="/price/setprice";
+                 };
+            	}
+            });
+    };
+
+    $("#batchAddButton").click(function(){
+    	deviceAllocation();
+    });
+
+    $(".bclose").click(function(){
+    	 $("#allprice").hide();
+    });
+
+
+    function delBind(deviceSn){
+        if(deviceSn == undefined){
+            return;
+        }
+        if (!confirm("确定解除绑定？")) {
+           return
+        }
+
+        $.post("/device/delete/bind",{deviceSn:deviceSn},function(data){
+            if(data.code == "0"){
+                location.reload();
+            }else{
+                alert(data.data);
+            }
+        });
+
+    }
+
+    $("input[name='checkcard']").each(function(i){
+      $(this).click(function () {
+        if ($(this).attr('checked')) {
+          $(this).attr('checked',false);
+        }else{
+          $(this).attr('checked',true);
+        }
+      });
+    });
+
+    function setcard() {
+      var cardArr = [];
+      $("input[name='checkcard']").each(function(i){
+        if ($(this).attr('checked')){
+          cardArr.push({deviceSn:$(this).val(),cardSupport:1});
+        }else{
+          cardArr.push({deviceSn:$(this).val(),cardSupport:0});
+        }
+      });
+      
+      $('#cardList').val(JSON.stringify(cardArr));
+      $('#cardform').submit();
+
+    };
+
+</script>
+<script>
+    $(document).on('click', 'th input:checkbox' , function(){
+        var that = this;
+        $(this).closest('table').find('tr > td:first-child input:checkbox')
+                .each(function(){
+                    this.checked = that.checked;
+                    $(this).closest('tr').toggleClass('selected');
+                });
+    });
+</script>

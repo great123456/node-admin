@@ -1,0 +1,127 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">设备</a>
+                </li>
+                <li class="active">新增</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                        <div class="col-xs-12">
+                            <div class="hr hr-24"></div>
+                            <form class="form-horizontal" role="form" action="/device/add" method="POST">
+                                <!-- #section:elements.form -->
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">设备编号</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-1" placeholder="设备编号" class="col-xs-10 col-sm-5" name="deviceSn" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">设备名称</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-2" placeholder="设备名称" class="col-xs-10 col-sm-5" name="deviceName"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">设备类型</label>
+
+                                    <div class="col-xs-5 col-sm-2">
+                                        <select class="form-control" id="factorySelect" data-placeholder="设备类型" name="deviceTypeId">
+                                            <option value="" selected> </option>
+                                            <% deviceType.forEach(function(info){ %>
+                                                <option value="<%= (info.id) %>"><%= (info.typeName) %></option>
+                                            <% })%>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">批次</label>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <select class="form-control" id="factorySelect" data-placeholder="批次" name="batchNum">
+                                            <option value="" selected> </option>
+                                            <% batch.forEach(function(info){ %>
+                                            <option value="<%= (info.batchNum) %>"><%= (info.batchName) %></option>
+                                            <% })%>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">设备描述</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-3" placeholder="设备描述" class="col-xs-10 col-sm-5" name="description"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">备注</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="备注" class="col-xs-10 col-sm-5" name="remark"/>
+                                    </div>
+                                </div>
+
+                                <!-- /section:elements.form -->
+                                <div class="space-4"></div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="SUBMIT">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            提交
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <!--<button class="btn" type="reset">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            重置
+                                        </button>-->
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+
+
+                        </div><!-- /.span -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+
+    <%include component/footer.ejs %>
+
+    <script type="text/javascript">
+        $("#factorySelect").change(function(){
+            $("#factoryName").val($("#factorySelect").find("option:selected").text());
+        });
+
+    </script>

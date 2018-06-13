@@ -1,0 +1,156 @@
+var express = require('express');
+
+var router = express.Router();
+var rest = require('../core/restUrl').urls;
+var utils = require('../core/util/utils');
+var http = require('../core/util/http');
+
+router.get('/show', function(req, res) {
+  console.log("---信息展示页面---");
+  var params = req.query;
+  console.log(params);
+  if(params.userId){
+  	var userId= params.userId;
+  }else{
+  	var userId='';
+  	params.userId='';
+  };
+  console.log('uid:'+userId);
+  if(params.finishTime){
+  	var time=params.finishTime;
+  	console.log(time);
+  	params.finishTime=time.substring(0,10);
+  	var finishTime=params.finishTime;
+  	console.log(finishTime);
+  }else{
+  	var finishTime='';
+  };
+  if(params.beginTime){
+  	var time=params.beginTime;
+  	console.log(time);
+  	params.beginTime=time.substring(0,10);
+  	var beginTime=params.beginTime;
+  	console.log('beginTime:'+beginTime);
+  }else{
+  	var beginTime='';
+  	console.log('beginTime:'+beginTime);
+  };
+  var createTime=beginTime+','+finishTime;
+  console.log('createTime:'+createTime);
+  if(params.currentPage){
+  	var currentPage = params.currentPage;
+  }else{
+  	var currentPage ='';
+  };
+  if(params.devNumber){
+  	var devNumber=params.devNumber;
+  }else{
+    var devNumber='';
+  };
+  if(params.regionNumber){
+  	var regionNum=params.regionNumber;
+  }else{
+    var regionNum='';
+  };
+  if(params.settleStatus){
+  	var settleStatus=params.settleStatus;
+  }else{
+  	var settleStatus='';
+  }; 
+  if(params.orderSn){
+  	var orderSn=params.orderSn;
+  }else{
+  	var orderSn='';
+  };
+  if(params.settleType){
+  	var settleType=params.settleType;
+  }else{
+  	var settleType='';
+  };
+  var body={
+  	userId:userId,
+  	devNumber:devNumber,
+  	regionNum:regionNum,
+  	status:settleStatus,
+  	orderSn:orderSn,
+  	settleType:settleType,
+  	createTime:createTime,
+  	currentPage:currentPage,
+  	pageSize:'10'
+  };
+  var restFulPotion = {
+      host: '192.168.3.19',
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.messageshow,
+      body: JSON.stringify(body)
+  };
+  http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("信息展示页面请求成功");
+       	   console.log(d);
+       	   console.log(d.data.list[0]);
+       	   var data={
+       	     PRO_MENU: { menu: 'message', subMenu: 'show' },
+       	     data:d.data,
+       	     params:params
+       	   };
+           res.render('messagepage',data);
+       }else {
+           console.log("信息展示页面请求错误");
+       }
+  });
+
+  
+});
+
+router.get('/account', function(req, res) {
+	 console.log("---结算账单页面请求----");
+	 var params=req.query;
+     console.log(req.session);
+	 if(params.currentPage){
+	 	var currentPage = params.currentPage;
+	 }else{
+	 	var currentPage ='';
+	 };
+     if(params.payeeUid){
+     	var payeeUid=params.payeeUid;
+     }else{
+     	var payeeUid='';
+     };
+	 var body={
+	 	currentPage:currentPage,
+	 	pageSize:'10',
+	 	uid:req.session.user.uid,
+	 	payeeUid:payeeUid
+	 };
+
+	 var restFulPotion = {
+	     host: '192.168.3.4',
+	     port: rest.emomoYunkong.port,
+	     path: rest.emomoYunkong.messageaccount,
+	     body: JSON.stringify(body)
+	 };
+
+	 http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("账单详情页面请求成功");
+       	   console.log(d);
+       	   console.log(d.data.list[0]);
+       	   var data={
+       	     PRO_MENU: { menu: 'message', subMenu: 'account' },
+       	     data:d.data,
+       	     params:params
+       	   };
+           res.render('messageaccount',data);
+       }else {
+           console.log("账单详情页面请求错误");
+       }
+
+     });
+
+     
+});
+
+module.exports = router;

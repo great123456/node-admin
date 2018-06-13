@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+exports.errorInit=function(a,b){var c=b.errorOption,d=b.base;a.use(function(a,b,c){var d=new Error("Not Found");d.status=404,c(d)}),a.use(function(b,e,f,g){c.isWebApi?a.get("env")===d.ENV?(f.status(b.status||500),f.send({message:b.message,error:b})):(f.status(b.status||500),f.send(c.errJson)):a.get("env")===d.ENV?(f.status(b.status||500),f.render(c.devErragePage,{message:b.message,error:b})):(f.status(b.status||500),f.render(c.errorPage))})};

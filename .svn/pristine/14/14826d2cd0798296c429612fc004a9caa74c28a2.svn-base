@@ -1,0 +1,109 @@
+
+    <%include component/head.ejs %>
+
+
+    <!-- /section:basics/sidebar -->
+    <div class="main-content">
+        <!-- #section:basics/content.breadcrumbs -->
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">设备类型</a>
+                </li>
+                <li class="active">编辑</li>
+            </ul><!-- /.breadcrumb -->
+
+        </div>
+
+        <!-- /section:basics/content.breadcrumbs -->
+        <div class="page-content">
+
+            <!-- /section:settings.box -->
+            <div class="page-content-area">
+<!--                <div class="page-header">
+
+                </div>&lt;!&ndash; /.page-header &ndash;&gt;-->
+
+                <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="hr hr-24"></div>
+                            <form class="form-horizontal" role="form" action="/deviceType/update" method="POST">
+                                <!-- #section:elements.form -->
+                                <input type="hidden" name="id" value="<%= data.id%>">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">设备类型编号</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" id="form-field-1" placeholder="设备类型编号" class="col-xs-10 col-sm-5" name="typeNum" value="<%= data.typeNum%>" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">设备类型名字</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-2" placeholder="设备类型名字" class="col-xs-10 col-sm-5" name="typeName" value="<%= data.typeName%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">设备品牌</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-3" placeholder="设备品牌" class="col-xs-10 col-sm-5" name="brand" value="<%= data.brand%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">厂家分成比例</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="厂家分成比例(0.01-0.99)" class="col-xs-10 col-sm-5" name="factoryRate" value="<%= data.factoryRate%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">厂家分成比例</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="厂家名称" class="col-xs-10 col-sm-5" name="factoryName" value="<%= data.factoryName%>" />
+                                    </div>
+                                </div>
+
+                                <!-- /section:elements.form -->
+                                <div class="space-4"></div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button class="btn btn-info" type="SUBMIT">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            更新
+                                        </button>
+
+                                        &nbsp; &nbsp; &nbsp;
+                                        <!--<button class="btn" type="reset">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            重置
+                                        </button>-->
+                                    </div>
+                                </div>
+
+                            </form>
+
+
+
+                        </div><!-- /.span -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content-area -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+
+
+    <script>
+
+
+    </script>
+    <%include component/footer.ejs %>

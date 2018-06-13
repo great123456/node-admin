@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+var express=require("express"),router=express.Router(),fs=require("fs"),func=require("../core/func"),logger=require("../core/util/logger"),rest=require("../core/restUrl"),utils=require("../core/util/utils"),http=require("../core/util/http"),httpClient=require("../core/util/httpClient").DHttpUtil,PAGE_SIZE=10;router.get("/water",function(a,b,c){var d={};d.PRO_MENU={menu:"funds",subMenu:"water"},b.render("fundsWater",d)}),module.exports=router;

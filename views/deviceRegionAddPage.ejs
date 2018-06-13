@@ -1,0 +1,402 @@
+<% include component/head.ejs %>
+
+
+
+<div class="main-content">
+    <!-- #section:basics/content.breadcrumbs -->
+    <div class="breadcrumbs" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">场所</a>
+            </li>
+            <li class="active">场所添加</li>
+        </ul>
+    </div>
+
+    <div class="page-content">
+        <!-- /section:settings.box -->
+        <div class="page-content-area">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="hr hr-24"></div>
+                    <form id="addForm" class="form-horizontal" action="/deviceRegion/add" method="POST">
+
+                        <% if ('INDUSTRY_AGENT' !=role) {%>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">代理商</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="loginName" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                                       id="form-field-1" placeholder="代理商名" class="col-xs-10 col-sm-5 " name="loginName"
+                                       style="border-radius:5px;"/>
+                                <input type="hidden" name="uid" id="uid">
+                                <button type="button" data-toggle="modal" data-target="#addModal"
+                                        class="btn btn-purple btn-sm" style="margin-left: 5px;" onclick="getAgent()">添加
+                                    <i class="ace-icon fa glyphicon-plus icon-on-right bigger-110"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                        <%}%>
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">编号</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="number" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"
+                                       id="form-field-1" placeholder="场所的编号" class="col-xs-10 col-sm-5 " name="number"
+                                       style="border-radius:5px;"/>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="name" placeholder="场所名称" class="col-xs-10 col-sm-5"
+                                       name="name"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">所在城市</label>
+                            <div class="col-sm-9" style="padding-left:5px">
+                                <div class="container">
+                                    <div data-toggle="distpicker">
+                                        <div class="form-group " style="width:155px;float:left;">
+                                            <select class="form-control " id="provinceName"
+                                                    style="border-radius:5px;appearance:none;-moz-appearance:none;-webkit-appearance:none;" name="provinceName">
+                                            </select>
+                                        </div>
+                                        <div class="form-group"
+                                             style="width:150px;float:left;margin-left:20px;">
+                                            <select class="form-control" id="cityName" name="cityName"
+                                                    style="border-radius:5px;appearance:none;-moz-appearance:none;-webkit-appearance:none;">
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group"
+                                             style="width:120px;float:left;margin-left:20px;">
+                                            <select class="form-control" id="districtName" name="districtName"
+                                                    style="border-radius:5px;appearance:none;-moz-appearance:none;-webkit-appearance:none;">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-2"
+                                   style="text-align:right;">详细地址</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="address" class="xs-10 col-sm-5"
+                                       value="" name="address" placeholder="详细地址"/>
+                                <button onclick="theLocation()" type="button"
+                                       style="margin:0 20px;width:60px;height:30px;border:1px solid #f2f2ef;border-radius:5px;font-size:19px;background:#97bffa;color:#ffffff;">查询</button>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="height:35px;">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-2"
+                                   style="text-align:right;">纬度</label>
+                            <div class="col-sm-2">
+                                <input type="text" id="latitude" placeholder="纬度" name="latitude"
+                                       style="padding-right:10px; "/>
+                            </div>
+
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-2"
+                                   style="text-align:right;">经度</label>
+                            <div class="col-sm-3">
+                                <input type="text" id="longitude" placeholder="经度" name="longitude"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="height:35px;">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-2"
+                                   style="text-align:right;">场所描述</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="description" placeholder="场所用途" class="col-xs-10 col-sm-5"
+                                       name="description"/>
+                            </div>
+                        </div>
+
+                        <div id="allmap" style="width:870px;height:400px;margin: 0 auto"></div>
+
+                        <input name="provinceId" id="provinceId" type="hidden">
+                        <input name="cityId" id="cityId" type="hidden">
+                        <input name="districtId" id="districtId" type="hidden">
+
+
+                        <input type="hidden" name="img" id="uploadForm1Img"/>
+                        <input type="hidden" name="img" id="uploadForm2Img"/>
+                        <input type="hidden" name="img" id="uploadForm3Img"/>
+                    </form>
+                    <br><br>
+                    <div class="form-group">
+                        <label class="col-sm-3" style="text-align: right;" for="form-field-2">上传图片</label>
+                        <style type="text/css">
+                            .c {
+                                margin: 10px;
+
+                            }
+
+                            .c > img {
+                                height: 150px;
+                                width: 150px;
+                                padding-bottom: 20px;
+                            }
+
+                        </style>
+                        <div class="col-sm-9">
+                            <div class="col-sm-3 c">
+                                <img src="/image/timg.jpg" style="">
+                                <br>
+                                <form id="uploadForm1" enctype="multipart/form-data">
+                                    <input type="file" name="file" onchange="doUpload('#uploadForm1')"/>
+                                </form>
+                            </div>
+                            <div class="col-sm-3 c">
+                                <img src="/image/timg.jpg">
+                                <form id="uploadForm2" enctype="multipart/form-data">
+                                    <input type="file" name="file" onchange="doUpload('#uploadForm2')"/>
+                                </form>
+                            </div>
+                            <div class="col-sm-3 c">
+                                <img src="/image/timg.jpg">
+                                <form id="uploadForm3" enctype="multipart/form-data">
+                                    <input type="file" name="file" onchange="doUpload('#uploadForm3')"/>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-offset-3 col-md-9" style="margin-left: 50%;margin-top: 20px;">
+                        <button class="btn btn-info" onclick="formSubmit()" style="border-radius:5px;">
+                            <i class="ace-icon fa fa-check bigger-110"></i>提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="addModal" class="modal fade" tabindex="-1" style="padding-right: 17px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span class="white">×</span>
+                        </button>所有代理商
+                    </div>
+                </div>
+
+                <div class="modal-body no-padding" id="addbody">
+                </div>
+
+                <div class="modal-footer no-margin-top">
+
+                    <div align="center" id="addPageButton"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Gzw7oxudQHN1GPWVu5QBwA8LnDmWkTIo"></script>
+
+
+<% include component/footer.ejs %>
+
+
+<script src="/js/distpicker.data.js" type="text/javascript"></script>
+<script src="/js/distpicker.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var map = new BMap.Map("allmap");
+    var point = new BMap.Point(116.331398,39.897445);
+    var geoc = new BMap.Geocoder();
+    var localSearch = new BMap.LocalSearch(map);
+
+    map.centerAndZoom(point,11);
+
+    //允许缩放
+    map.enableScrollWheelZoom(true);
+    //允许自动调节窗体大小
+    localSearch.enableAutoViewport();
+    localSearch.setSearchCompleteCallback(function (searchResult) {
+        var poi = searchResult.getPoi(0);
+        if (poi ==undefined){
+            alert('查询不到该地区');
+            return false;
+        }
+        console.log(searchResult.getPoi(0));
+
+        $('#longitude').val(poi.point.lng);
+        $('#latitude').val(poi.point.lat);
+
+        map.centerAndZoom(poi.point, 18);
+        map.clearOverlays();
+
+        creatMarker(poi.point);
+    });
+
+    function creatMarker(point) {
+        // 创建标注，为要查询的地址对应的经纬度
+        var marker = new BMap.Marker(new BMap.Point(point.lng, point.lat));
+        //可拖拽
+        marker.enableDragging();
+        //将结果进行拼接并显示到对应的容器内
+        marker.addEventListener("dragend", function (e) {
+            $('#longitude').val(e.point.lng);
+            $('#latitude').val(e.point.lat);
+
+            geoc.getLocation(e.point, function (rs) {
+                $('#address').val(rs.address);
+            });
+
+        });
+
+        marker.addEventListener("click", function () {
+            var address = $('#address').val();
+            var content = address + "<br/><br/>经度:"
+                + point.lng
+                + "<br/>纬度:"
+                + point.lat;
+            var infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+            this.openInfoWindow(infoWindow);
+        });
+
+        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        setTimeout(function () {
+            //取消动画
+            marker.setAnimation(null);
+        }, 2000);
+
+        map.addOverlay(marker);
+    }
+
+    //查询结果
+    function theLocation() {
+        var address = $('#address').val();
+        var provinceName =$('#provinceName').val();
+        var cityName =$('#cityName').val();
+        var districtName =$('#districtName').val();
+        var keyword = provinceName+cityName+districtName+address;
+        localSearch.search(keyword);
+    }
+
+
+    function formSubmit () {
+
+        var number = $("#number").val();
+        var name = $("#name").val();
+
+        if (number == undefined || number =='') {
+            alert("编号不能为空");
+            return false;
+        }
+
+        if (name == undefined || name =='') {
+            alert("场所名称不能为空");
+            return false;
+        }
+
+        var dataCode = {
+            provinceId:$("#provinceName").find("option:selected").attr('data-code'),
+            cityId:$("#cityName").find("option:selected").attr('data-code'),
+            districtId:$("#districtName").find("option:selected").attr('data-code'),
+        }
+
+        $('#provinceId').val(dataCode.provinceId);
+        $('#cityId').val(dataCode.cityId);
+        $('#districtId').val(dataCode.districtId);
+        $('#addForm').submit();
+
+    }
+
+    function getAgent(currentPage) {
+        currentPage =currentPage ||1 ;
+        $.ajax({
+            url:'/super/proxyAdmin',
+            type: 'POST',
+            data:{currentPage:currentPage},
+            error: function(xhr, textStatus, errorThrown) {
+
+            },
+            success: function(data, textStatus, xhr) {
+
+                if (data.code ==500){
+                    $('#addbody').html("");
+                    var straddAddlist=`<div class="panel-body"><h1>${data.mes}</h1></div>`
+                    $('#addbody').html(straddAddlist);
+                }else {
+                    //调用分页
+                    laypage({
+                        cont: 'addPageButton',
+                        pages: data.data.totalPages,
+                        curr: data.data.currentPage,
+                        jump: function (obj, first) {
+                            if (!first) {
+                                getAgent(obj.curr);
+                            }
+                        }
+                    });
+                    toAddList(data.data.list);
+                }
+            }
+        });
+    }
+
+    function toAddList(list) {
+        console.log(list)
+        $('#addbody').html("");
+        var strtoAddList ='';
+        if (list ==undefined ||list.length==0){
+            strtoAddList=`<div class="panel-body"><h1>没有代理商了</h1></div>`
+        }else{
+            strtoAddList =`<table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top" ><thead><tr><th>登录名</th><th>手机号码</th><th>总设备数</th><th>操作</th></tr></thead><tbody>`;
+            for (var i =0 ;i<list.length;i++){
+                strtoAddList =strtoAddList + `<tr><td>${list[i].loginName}</td><td>${list[i].phone}</td><td>${list[i].allDevice}</td><td><input  value="添加" type="submit" class="btn btn-white btn-sm btn-primary" onclick="setAddByUid('${list[i].uid}','${list[i].loginName}') "></td></tr>`;
+            }
+            strtoAddList=strtoAddList+`</tbody></table>`;
+        }
+        $('#addbody').html(strtoAddList);
+    }
+
+
+    function setAddByUid(uid,loginName) {
+        $('#loginName').val(loginName);
+        $('#uid').val(uid);
+        $('#addModal').modal('hide')
+    }
+
+    function doUpload (id) {
+
+        var formData = new FormData($(id)[0]);
+        $.ajax({
+            url: '/util/file/upload',
+            type: 'POST',
+            cache: false,
+            data: new FormData($(id)[0]),
+            processData: false,
+            contentType: false
+        }).done(function (res) {
+            if (res.code != 0) {
+                alert(res.mes);
+            } else {
+                $(id).parent().children(".deviceRegionPicture").children("img").attr("src", res.data[0]);
+                $(id + "Img").val(res.data[0]);
+            }
+
+        }).fail(function (res) {
+        });
+    }
+</script>

@@ -1,0 +1,279 @@
+<!-- 
+	
+	by su
+	订单报表
+
+ -->
+<%include component/head.ejs %>
+<link rel="stylesheet" href="/layui/css/layui.css">
+<style type="text/css">
+	.su-main{
+		overflow: hidden;
+		padding: 20px 0 0 40px;
+		font-size: 16px;
+	}
+	.su-a{
+		margin: 15px 20px 15px 0;
+		clear: both;
+		overflow-x: hidden;
+	}
+	.su-div1 > div{
+		float: left;
+	}
+	.su-div1 > div:nth-child(1){
+		width: 80px;
+	}
+	.su-div1 > div > span{
+		color: red;
+	}
+	.su-div1 > div > input{
+		margin: 0 10px;
+	}
+	.su-div1 > div > div{
+		margin: 5px 10px;
+	}
+	.su-select{
+		line-height: 34px;
+		height: 34px;
+	}
+	.su-order > div > span{
+		line-height: 42px;
+		height: 42px;
+	}
+	.su-order > div > input{
+		margin: 10px 10px;
+	}
+	.su-div1 > div > select{
+		margin: 0 10px;
+	}
+	#submit{
+		margin-left: 80px;
+	}
+	.details > div:nth-child(1){
+		float: left;
+		line-height: 42px;
+		height: 42px;
+	}
+	.details > div:nth-child(1) > span:nth-child(2){
+		padding-left: 5px;
+		border-left: 4px solid rgb(67, 142, 185);
+	}
+	.details > div:nth-child(2){
+		float: right;
+		margin-right: 20px;
+	}
+	.details > div:nth-child(2) > span{
+		padding-right: 20px;
+	}
+
+</style>
+<div class="main-content">
+	<div class="breadcrumbs" id="breadcrumbs" style="overflow: hidden;">
+		<ul class="breadcrumb">
+			<li> <i class="ace-icon fa fa-home home-icon"></i>
+				<a href="#">运营数据</a>
+			</li>
+			<li class="active">订单列表</li>
+		</ul>
+	</div>
+
+	<div class="su-main">
+		<div style="font-size: 24px;">订单详情:</div>
+		<div style="visibility: hidden;height: 0;margin: 0">.</div>
+
+		<form action="/operation/order" method="get" onsubmit="return onSearch()" id="searchForm">
+			<div class="su-div1 su-a">
+				<div>
+					<span>*</span>下单时间
+				</div>
+				<div>
+					<input id="startDate" name="startDate" value="<%=startDate%>">		
+					至
+					<input id="endDate" name="endDate" value="<%=endDate%>"/>		
+					<div>时间跨度最多支持31天</div>
+					<input id="currentPage" name="currentPage" type="hidden" value="<%=currentPage%>"/>
+				</div>
+			</div>
+		
+			<div class="su-div1 su-select su-a">
+				<div>
+					<span>&nbsp;</span>选择场所
+				</div>
+				<div>
+					<select class="form-control">
+						<option selected="selected">所有场所</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="su-div1 su-order su-a">
+				<div style="visibility:hidden">
+					<span>&nbsp;</span>订单号
+				</div>
+				<div style="display:none;">
+					<input>
+				</div>
+				<button  type="submit" class="btn btn-primary" >查询</button>
+			</div>
+
+
+		</form>
+		
+
+		<div class="details su-a">
+			<div>
+				<span>&nbsp;</span>
+				<span>订单明细列表</span>
+			</div>
+
+
+			<div>
+				<span style="padding-right: 10px;
+				">下载订单列表:</span>
+
+				<form enctype="multipart/form-data" action="http://admin.emomo.cc/util/export/monthOrderDetail.xls" method="post" onsubmit="return getxls()">
+					<input type="hidden" name="userPhone" value="<%=userPhone%>">
+					<input type="hidden" name="startDate" id="xlsstartDate">
+					<input type="hidden" name="endDate" id="xlsendDate">
+					<input type="hidden" name="orderType" id="xlsorderType">
+					<button type="submit" class="btn btn-primary">导出excel表格式
+					</button>
+				</form>
+			</div>	
+		</div>
+
+		<div class="su-a">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>下单时间</th>
+						<th>订单号</th>
+						<th>类型</th>
+						<th>订单金额(元)</th>
+						<th>订单描述</th>
+						<th>下单地址</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				<%for(var i = 0 ; i <data.length ; i++){
+				
+					var time = new Date(data[i].createDate).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+
+					var type ;
+    				if(data[i].orderType == 8){
+						type = '收入'
+    				}%>
+					<tr>
+						<td class="center"><%=i + 1%></td>
+						<td class="center"><%=time%></td>
+						<td class="center"><%=data[i].orderSn%></td>
+						<td class="center"><%=type%></td>
+						<td class="center"><%=data[i].orderAmount%></td>
+						<td class="center"><%=data[i].orderDesc%></td>
+
+						<td class="center"><%=data[i].orderRegion%></td>
+					<td class="center">
+						<button type="button" class="btn btn-white btn-sm btn-primary" onclick="openDetail()" disabled="disabled">查看</button>
+					</td>
+					</tr>
+					<%}%>
+				</tbody>
+			</table>	
+		</div>
+
+		<div id="demo1" style="text-align: center;"></div>
+	</div>
+</div>
+
+
+<%include component/footer.ejs %>    
+<script src="/layui/layui.js"></script>
+<script>
+layui.use(['layer','laydate','laypage'], function(){
+  	var laydate = layui.laydate;
+  	var layer = layui.layer;
+  	var laypage = layui.laypage
+	var start = {
+		max: laydate.now(),
+		istoday: false,
+	};
+
+	var end = {
+		max: laydate.now(),
+		istoday: true,
+		choose: function(datas){
+		 	  start.max = datas;
+		}
+	};
+ 
+	document.getElementById('startDate').onclick = function(){
+		start.elem = this;
+		laydate(start);
+	}
+ 	document.getElementById('endDate').onclick = function(){
+		end.elem = this;
+		laydate(end);
+	}
+	var currPage = <%= currentPage%> ;	
+	laypage({
+    	cont: 'demo1'
+    	,pages: <%=totalPages%>  
+    	,groups: 5
+    	,curr: currPage
+    	,skin: '#428bca'
+    	,jump: function(obj, first){
+      		if(!first){
+        		$("#currentPage").val(obj.curr);
+        		$('#searchForm').submit();                
+                layer.msg('第'+ obj.curr +'页');
+      		}
+    	}	
+  	});
+});
+function onSearch() {
+ 	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	if (startDate == '') {
+		alert('请输入起始日期');
+		return false;
+	}
+	if (endDate == '') {	
+		alert('请输入结束日期');
+		return false;
+	}
+	if(Date.parse(startDate) > Date.parse(endDate)){
+		alert('日期格式错误');
+		return false;
+	}
+	return true;
+ }
+function getxls() {
+ 	var startDate = $('#startDate').val();
+	var endDate = $('#endDate').val();
+	var orderType = 2;
+	if (startDate == '') {
+		alert('请输入起始日期');
+		return false;
+	}
+	if (endDate == '') {	
+		alert('请输入结束日期');
+		return false;
+	}
+	if(Date.parse(startDate) > Date.parse(endDate)){
+		alert('日期格式错误');
+		return false;
+	}
+	
+	$('#xlsstartDate').val(startDate);
+	$('#xlsendDate').val(endDate);
+	$('#xlsorderType').val(orderType);
+
+	return true;
+}
+</script>
+
+
+

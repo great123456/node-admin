@@ -1,0 +1,2 @@
+/*! emomoBms 2017-02-10 */
+var session=require("express-session"),RedisStore=require("connect-redis")(session);exports.sessionInit=function(a,b){var c=b.sessionOption;c.select==c.type.redis?a.use(session({store:new RedisStore(c.conf),session_key:c.session_key,secret:c.opt.secret,resave:c.opt.resave,saveUninitialized:c.opt.saveUninitialized})):c.select==c.type.local&&a.use(session({type:"local",session_key:c.opt.session_key,secret:c.opt.secret,resave:c.opt.resave,saveUninitialized:c.opt.saveUninitialized}))};

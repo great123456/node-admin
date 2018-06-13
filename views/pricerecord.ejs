@@ -1,0 +1,93 @@
+
+    <%include component/head.ejs %>
+    <div class="main-content">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">价格管理</a>
+                </li>
+                <li class="active">修改价格记录</li>
+            </ul>
+        </div>
+
+        <div class="page-content">
+            <div class="page-content-area">
+                <div class="row">
+                        <div class="col-xs-12">
+                            <div class="hr hr-24"></div>
+                            <form class="form-horizontal" role="form" action="/price/setpricerecord" method="POST">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">&nbsp&nbspID:</label>
+                                    <div class="col-sm-9">
+                                       <input type="text"  name="id" id="form-field-1" class="col-xs-10 col-sm-5" placeholder="<%= params.id%>"  value="<%= params.id%>"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">套餐编号:</label>
+                                    <div class="col-sm-9">
+                                       <input type="text"  name="packNum" id="form-field-2" class="col-xs-10 col-sm-5" placeholder="<%= params.packNum%>" value="<%= params.packNum%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">按摩价格:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-1" id="form-field-3" class="col-xs-10 col-sm-5" name="price" placeholder="<%= params.price%>" value="<%= params.price%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">按摩模式:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-2" id="form-field-4" class="col-xs-10 col-sm-5" name="func" placeholder="<%= params.func%>" value="<%= params.func%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-5">功能命名:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-3" id="form-field-5" class="col-xs-10 col-sm-5" name="functionCmd" placeholder="<%= params.functionCmd%>" value="<%= params.functionCmd%>" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-6">按摩时间:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" id="form-field-6" class="col-xs-10 col-sm-5" name="workTime" placeholder="<%= params.workTime%>" value="<%= params.workTime%>" />
+                                    </div>
+                                </div>
+
+                                <div class="space-4"></div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <div class="btn"
+                                        id="form-submit">
+                                            修改
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/jquery.js" ></script>
+    <script type="text/javascript">
+     $(function(){
+      $("#form-submit").click(function(){
+        $(".form-horizontal").submit();
+        
+      });     
+
+     });
+    </script>
+    <%include component/footer.ejs %>

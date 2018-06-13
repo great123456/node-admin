@@ -1,0 +1,204 @@
+
+
+var express = require('express');
+var router  = express.Router();
+
+var fs      = require("fs");
+var func    = require('../core/func');
+var logger  = require('../core/util/logger');
+var rest    = require('../core/restUrl');
+var http   = require('../core/util/http');
+var httpClient   = require('../core/util/httpClient').DHttpUtil;
+var sd     = require('silly-datetime');
+var utils   = require('../core/util/utils');
+
+var restFulPotion = {host:rest.urls['emomo-yunkong']['host'],port:rest.urls['emomo-yunkong']['port'],postType:"json"};
+var restFulConf = rest.urls['emomo-yunkong'] ;
+/**
+ * index
+ */
+router.get('/', function(req, res, next) {
+    res.render("login");
+});
+
+router.get('/login', function(req, res, next) {
+    res.render("login");
+});
+
+/**
+ * 超级管理员登录
+ */
+router.get('/login/admin', function(req, res, next) {
+    res.render("superLogin");
+});
+
+
+router.post('/admin/dologin', function(req, res, next) {
+    var params = req.body ;
+    if(params.account == undefined || params.account == "")
+    {
+        ajaxReturn(res,-1,"登录名不能为空") ;return ;
+    }
+    if(params.password == undefined || params.password == "")
+    {
+        ajaxReturn(res,-1,"密码不能为空") ;return ;
+    }
+
+    data = {
+        account : params.account,
+        password: params.password
+    }
+
+    var restFulPotion = {
+        host:rest.urls['emomo-usersystem']['host'],
+        port:rest.urls['emomo-usersystem']['port'],
+        postType:"json"
+    };
+    var restFulConf = rest.urls['emomo-usersystem'] ;
+
+    restFulPotion.path =restFulConf.adminlogin ;
+    restFulPotion.body=JSON.stringify(data);
+    http.doPost(restFulPotion,function(status,data){
+        if(data!= undefined && status == 200 && data.code == 0){
+
+            req.session['user'] = {
+                uid : data.data.uid ,
+                email : data.data.email,
+                phone : data.data.phone,
+                loginName : data.data.loginName,
+                nickName : data.data.nickname,
+                rolesId  : 1,
+                role    : "SUPER_ADMIN",
+            }
+            req.session["MEMBER_ROLE"]  = "SUPER_ADMIN" ;
+            ajaxReturn(res,1,"登录成功") ;return ;
+        }else{
+            //utils.pageMessage(req,res,data.mes,callback,"device","proxyDevice");
+            ajaxReturn(res,-1,data.mes) ;return ;
+        }
+    });
+});
+
+
+
+
+router.post('/login', function(req, res, next) {
+    var params = req.body ;
+    if(params.account == undefined || params.account == "")
+    {
+        ajaxReturn(res,-1,"登录名不能为空") ;return ;
+    }
+    if(params.password == undefined || params.password == "")
+    {
+        ajaxReturn(res,-1,"密码不能为空") ;return ;
+    }
+
+    data = {
+        account : params.account,
+        password: params.password
+    }
+
+    var restFulPotion = {host:rest.urls['emomo-usersystem']['host'],port:rest.urls['emomo-usersystem']['port'],postType:"json"};
+    var restFulConf = rest.urls['emomo-usersystem'] ;
+
+    restFulPotion.path =restFulConf.login ;
+    restFulPotion.body=JSON.stringify(data);
+    http.doPost(restFulPotion,function(status,data){
+
+        if(data!= undefined && status == 200 && data.code == 0){
+            
+            req.session['user'] = {
+                uid : data.data.userReg.uid ,
+                email : data.data.userReg.email,
+                phone : data.data.userReg.phone,
+                loginName : data.data.userInfo.loginName,
+                nickName : data.data.userInfo.nickname,
+                rolesId  : data.data.roles[0].id,
+                role    : data.data.roles[0].role,
+            }
+            req.session["MEMBER_ROLE"]  = data.data.roles[0].role ;
+
+            ajaxReturn(res,1,"登录成功") ;
+            return ;
+        }else{
+            //utils.pageMessage(req,res,data.mes,callback,"device","proxyDevice");
+            ajaxReturn(res,-1,data.mes) 
+            ;return ;
+        }
+    });
+});
+
+router.get('/updatePassword', function(req, res, next) {
+
+    data = {};
+    data["PRO_MENU"] ={"menu":"member","subMenu":"updatePassword"};
+    res.render("updatePassword",data);
+});
+
+router.post('/updatePassword', function(req, res, next) {
+
+    params = req.body ;
+
+    oldpwd = params.oldpwd ;
+    if(oldpwd == undefined || oldpwd == "")
+    {
+        utils.pageMessage(req,res,"旧密码不能为空","/member/updatePassword","member","updatePassword");
+    }
+    newpwd = params.newpwd ;
+    if(newpwd == undefined || newpwd == "")
+    {
+        utils.pageMessage(req,res,"新密码不能为空","/member/updatePassword","member","updatePassword");
+    }
+
+    if(newpwd != params.renewpwd)
+    {
+        utils.pageMessage(req,res,"确认密码出错","/member/updatePassword","member","updatePassword");
+    }
+
+    data = {
+        phone : req.session['user']['phone'],
+        oldpwd:oldpwd,
+        newpwd:newpwd,
+        confirmPwd:params.renewpwd
+    }
+
+    var restFulPotion = {host:rest.urls['emomo-usersystem']['host'],port:rest.urls['emomo-usersystem']['port'],postType:"json"};
+    var restFulConf = rest.urls['emomo-usersystem'] ;
+
+    restFulPotion.path =restFulConf.updatePassword ;
+    restFulPotion.body=JSON.stringify(data);
+    http.doPost(restFulPotion,function(status,data){
+        if(data!= undefined && status == 200 && data.code == 0){
+
+            utils.pageMessage(req,res,"修改成功","/member/updatePassword","member","updatePassword");
+        }else{
+            utils.pageMessage(req,res,data.mes,"/member/updatePassword","member","updatePassword");
+
+        }
+    });
+});
+
+
+router.get('/logout', function(req, res, next) {
+
+    req.session.destroy();
+
+    res.render("login");
+});
+
+function ajaxReturnData(code,mes,data)
+{
+    code    = code || "-1" ;
+    data    = data == undefined ? {} : data;
+    mes     = mes || "error" ;
+    return {"code":code,"data":data,"mes":mes} ;
+}
+
+function ajaxReturn(res,code,mes,data)
+{
+    res.send(ajaxReturnData(code,mes,data));
+}
+
+
+
+module.exports = router;

@@ -1,0 +1,291 @@
+<div id="sidebar" class="sidebar responsive">
+    <script type="text/javascript">
+        try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+    </script>
+
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-success">
+                <i class="ace-icon fa fa-signal"></i>
+            </button>
+
+            <button class="btn btn-info">
+                <i class="ace-icon fa fa-pencil"></i>
+            </button>
+
+            <!-- #section:basics/sidebar.layout.shortcuts -->
+            <button class="btn btn-warning">
+                <i class="ace-icon fa fa-users"></i>
+            </button>
+
+            <button class="btn btn-danger">
+                <i class="ace-icon fa fa-cogs"></i>
+            </button>
+
+            <!-- /section:basics/sidebar.layout.shortcuts -->
+        </div>
+
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+
+            <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span>
+
+            <span class="btn btn-danger"></span>
+        </div>
+    </div><!-- /.sidebar-shortcuts -->
+
+    <ul class="nav nav-list">
+
+        <li class="<%= PRO_MENU.menu == "index" ? "active" : ""%>">
+            <a href="#" class="">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text"> 主页 </span>
+
+                <b class="arrow"></b>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "superAdmin" ? "active hsub open" : ""%>">
+            <a href="/index" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text"> 账户管理 </span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "add" ? "active" : ""%>">
+                    <a href="/super/subProxyAdmin/add">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        新增子代理商
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<%= PRO_MENU.subMenu == "subProxyAdminPage" ? "active" : ""%>">
+                    <a href="/super/subProxyAdmin">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        我的子代理商
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "address" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">场所管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "addAddress" ? "active" : ""%>">
+                    <a href="/deviceRegion/add">
+                        <i class="menu-icon fa fa-caret-right"></i>新增场所
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<%= PRO_MENU.subMenu == "myAddress" ? "active" : ""%>">
+                    <a href="/deviceRegion/page">
+                        <i class="menu-icon fa fa-caret-right"></i>我的场所
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "device" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">设备管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "proxyDevice" ? "active" : ""%>">
+                    <a href="/proxyDevice/page">
+                        <i class="menu-icon fa fa-caret-right"></i>我的设备
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+
+                <li class="<%= PRO_MENU.menu == "error" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">异常管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "errorDevice" ? "active" : ""%>">
+                    <a href="/error/devicepage">
+                        <i class="menu-icon fa fa-caret-right"></i>设备异常
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<%= PRO_MENU.subMenu == "errorOrder" ? "active" : ""%>">
+                    <a href="/error/orderpage">
+                        <i class="menu-icon fa fa-caret-right"></i>订单异常
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "funds" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">资金管理</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "water" ? "active" : ""%>">
+                    <a href="/funds/water">
+                        <i class="menu-icon fa fa-caret-right"></i>资金流水
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        <li class="<%= PRO_MENU.menu == "operation" ? "active hsub open" : ""%>">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text">运营数据</span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="<%= PRO_MENU.subMenu == "mouth" ? "active" : ""%>">
+                    <a href="/operation/mouth">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        月报表
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="<%= PRO_MENU.subMenu == "day" ? "active" : ""%>">
+                    <a href="/operation/day">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        日报表
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                
+                <li class="<%= PRO_MENU.subMenu == "order" ? "active" : ""%>">
+                    <a href="/operation/order">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        订单报表
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+            </ul>
+        </li>
+
+<!--         <li class="<%= PRO_MENU.menu == "subProxyAdminPage" ? "active hsub open" : ""%>">
+    <a href="" class="dropdown-toggle">
+        <i class="menu-icon fa fa-list"></i>
+        <span class="menu-text"> 分润管理 </span>
+
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+
+        <li class="<%= PRO_MENU.subMenu == "subProxyAdminPage" ? "active" : ""%>">
+            <a href="/deviceRegion/share/page">
+                <i class="menu-icon fa fa-caret-right"></i>
+                场所分润
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+    </ul>
+</li> -->
+
+<!--<li class="<%= PRO_MENU.menu == "member" ? "active hsub open" : ""%>">
+    <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-list"></i>
+        <span class="menu-text">个人</span>
+
+        <b class="arrow fa fa-angle-down"></b>
+    </a>
+
+    <b class="arrow"></b>
+
+    <ul class="submenu">
+
+        <li class="<%= PRO_MENU.subMenu == "updatePassword" ? "active" : ""%>">
+            <a href="/member/updatePassword">
+                <i class="menu-icon fa fa-caret-right"></i>修改密码
+            </a>
+
+            <b class="arrow"></b>
+        </li>
+
+    </ul>
+</li> -->
+
+    </ul><!-- /.nav-list -->
+
+    <!-- #section:basics/sidebar.layout.minimize -->
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+
+    <!-- /section:basics/sidebar.layout.minimize -->
+    <script type="text/javascript">
+        try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+    </script>
+</div>

@@ -1,0 +1,41 @@
+var express = require('express');
+
+var router = express.Router();
+var rest = require('../core/restUrl').urls;
+var utils = require('../core/util/utils');
+var http = require('../core/util/http');
+
+router.get('/show', function(req, res) {
+  console.log("---信息展示页面---");
+  var params = req.query;
+  currentPage = params.currentPage == "" ? 1 : params.currentPage;
+  var body={
+  	currentPage:currentPage,
+  	pageSize:'10'
+  };
+  var restFulPotion = {
+      host: rest.emomoYunkong.host,
+      port: rest.emomoYunkong.port,
+      path: rest.emomoYunkong.messageshow,
+      body: JSON.stringify(body)
+  };
+  http.doPost(restFulPotion, function(status, d) {
+
+       if (d != undefined && status == 200 && d.code == '0') {
+       	   console.log("信息展示页面请求成功");
+       	   console.log(d);
+       	   console.log(d.data.list[0]);
+       	   var data={
+       	     PRO_MENU: { menu: 'message', subMenu: 'show' },
+       	     data:d.data
+       	   };
+           res.render('messagepage',data);
+       }else {
+           console.log("信息展示页面请求错误");
+       }
+  });
+
+  
+});
+
+module.exports = router;

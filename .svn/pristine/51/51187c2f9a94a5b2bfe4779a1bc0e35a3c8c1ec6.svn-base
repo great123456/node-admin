@@ -1,0 +1,102 @@
+
+    <%include component/head.ejs %>
+    <div class="main-content">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="ace-icon fa fa-home home-icon"></i>
+                    <a href="#">价格管理</a>
+                </li>
+                <li class="active">新增价格记录</li>
+            </ul>
+        </div>
+
+        <div class="page-content">
+            <div class="page-content-area">
+                <div class="row">
+                        <div class="col-xs-12">
+                            <div class="hr hr-24"></div>
+                            <form class="form-horizontal" role="form" action="/price/queryadd" method="POST">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">套餐编号:</label>
+                                    <div class="col-sm-9">
+                                       <p style="margin-top:2px;font-size:15px;"><%= packNum%></p>
+                                       <input type="text"  name="packNum" value="<%= packNum%>" style="display:none;"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">按摩价格:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-1" placeholder="按摩价格" class="col-xs-10 col-sm-5" name="price"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-2">按摩模式:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-2" placeholder="按摩模式" class="col-xs-10 col-sm-5" name="func"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-3">功能命名:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-3" placeholder="功能命名" class="col-xs-10 col-sm-5" name="functionCmd"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-4">按摩时间:</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" id="form-field-4" placeholder="按摩时间" class="col-xs-10 col-sm-5" name="workTime"/>
+                                    </div>
+                                </div>
+
+                                <div class="space-4"></div>
+
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <div class="btn"
+                                        id="form-submit">
+                                            添加
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/jquery.js" ></script>
+    <script type="text/javascript">
+     $(function(){
+      $("#form-submit").click(function(){
+        var value1=$("#form-field-1").val();
+        var value2=$("#form-field-2").val();
+        var value3=$("#form-field-3").val();
+        var value4=$("#form-field-4").val();
+        if(value1==''){
+            alert("按摩价格不能为空");
+        }else if(value2==''){
+            alert("按摩模式不能为空");
+        }else if(value3==''){
+            alert("功能命名不能为空");
+        }else if(value4==''){
+            alert("按摩时间不能为空");
+        }else {
+            $(".form-horizontal").submit();
+        };
+        
+      });     
+
+     });
+    </script>
+    <%include component/footer.ejs %>
